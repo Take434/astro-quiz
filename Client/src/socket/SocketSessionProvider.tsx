@@ -7,9 +7,12 @@ import {
 } from "react";
 import { io, Socket } from "socket.io-client";
 
-const SessionContext = createContext<Socket | null>(null);
+const SessionContext = createContext<SocketSessionState | null>(null);
 export function SocketSessionProvider({ children }: { children: ReactNode }) {
-  const [activeSocket, setActiveSocket] = useState<any | null>(null);
+  // const [activeSocket, setActiveSocket] = useState<any | null>(null);
+  const [socketSession, setSocketSession] = useState<SocketSessionState | null>(
+    null,
+  );
 
   useEffect(() => {
     const socket = io("http://localhost:3000", {
@@ -17,10 +20,21 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
       autoConnect: false,
     });
 
-    setActiveSocket(socket);
+    setSocketSession({ ...socketSession, socket: socket });
 
-    socket.on("connect", () => {
-      socket.emit("session:get");
+    socket.on("connect", () => {});
+
+    socket.on("game:rejoin", (data: any) => {
+      if (
+        confirm(
+          "Du bist bereits in einem Spiel, möchtest du beitreten? " +
+            data.gameid,
+        )
+      ) {
+        socket.emit("game:rejoin", true);
+      } else {
+        socket.emit("game:rejoin", false);
+      }
     });
 
     socket.on("disconnect", () => {});
@@ -37,13 +51,13 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <SessionContext.Provider value={activeSocket}>
+    <SessionContext.Provider value={socketSession}>
       {children}
     </SessionContext.Provider>
   );
 }
 
-export function useSocket() {
+export function useSocketSession() {
   const ctx = useContext(SessionContext);
 
   if (!ctx) {
@@ -52,3 +66,8 @@ export function useSocket() {
 
   return ctx;
 }
+
+type SocketSessionState = {
+  socket: Socket;
+  gameId?: number;
+};

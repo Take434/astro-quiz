@@ -49,8 +49,6 @@ app.get("/", (req: Request, res: Response) => {
 io.on("connection", (socket) => {
   const session = socket.request.session;
 
-  console.log("connection happening");
-
   const persistSession = async () => {
     if (!session) {
       return;
@@ -60,6 +58,9 @@ io.on("connection", (socket) => {
 
     if (gameid) {
       socket.join(`game:${gameid}`);
+      socket.emit("game:rejoin", {
+        gameid: gameid,
+      });
     }
 
     session.touch();
@@ -84,8 +85,17 @@ io.on("connection", (socket) => {
     console.clear();
   });
 
+  socket.on("game:rejoin", async (value: boolean) => {
+    if (!value) {
+      socket.request.session.gameid = undefined;
+      await socket.request.session.save();
+    }
+  });
+
   registerPlayerHandlers(socket, io);
   registerHostHandlers(socket);
+
+  console.log("successfully registed all socket-listeners");
 });
 
 console.log("webserver started");

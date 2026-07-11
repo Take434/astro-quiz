@@ -1,11 +1,11 @@
 import { rootRoute } from "#/app";
-import { useSocket } from "#/socket/SocketSessionProvider";
+import { useSocketSession } from "#/socket/SocketSessionProvider";
 import { createRoute } from "@tanstack/react-router";
 import type { Socket } from "socket.io-client";
 
 export const playerRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/client",
+  path: "/play",
   component: RouteComponent,
 });
 
@@ -27,7 +27,8 @@ const hostGame = (socket: Socket) => {
 };
 
 function RouteComponent() {
-  const socket = useSocket();
+  const { socket, gameId } = useSocketSession();
+  console.log(gameId);
   return (
     <div className="flex flex-col">
       <button onClick={() => joinGame(socket)}>join</button>

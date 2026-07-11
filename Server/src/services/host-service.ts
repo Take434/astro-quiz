@@ -7,7 +7,7 @@ export function registerHostHandlers(socket: Socket) {
     const sessionId = socket.request.session.id;
     await redisGameStore.set(
       String(id),
-      data && {
+      (data ?? {}) && {
         host: sessionId,
       },
     );

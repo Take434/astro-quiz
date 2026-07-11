@@ -9,15 +9,15 @@ export const redisClient: RedisClientType = createClient({
 });
 
 redisClient.on("error", (err) => {
-  console.error("REDIS: error:", err);
+  console.error("redis error:", err);
 });
 
 redisClient.on("connect", () => {
-  console.log("REDIS: connecting...");
+  // console.log("REDIS: connecting...");
 });
 
 redisClient.on("ready", () => {
-  console.log("REDIS: ready");
+  console.log("redis started");
 });
 
 export const redisSessionStore = new RedisStore({

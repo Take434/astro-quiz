@@ -2,19 +2,20 @@ import { Server, Socket } from "socket.io";
 import { redisGameStore } from "../redis";
 
 export function registerPlayerHandlers(socket: Socket, io: Server) {
-  socket.on("join", async (data: JoinEvent) => {
-    const game = await redisGameStore.get(data.roomId);
-    console.log(game);
+  socket.on("game:join", async (data: JoinEvent) => {
+    const game = await redisGameStore.get(data.gameId);
 
-    socket.join(`game:${data.roomId}`);
+    if (game) {
+      socket.join(`game:${data.gameId}`);
 
-    io.to(`game:${data.roomId}`).emit("player:joined", {
-      player: data.username,
-    });
+      io.to(`game:${data.gameId}`).emit("player:joined", {
+        player: data.username,
+      });
 
-    socket.request.session.gameid = data.roomId;
-    await socket.request.session.save();
+      socket.request.session.gameid = data.gameId;
+      await socket.request.session.save();
+    }
   });
 }
 
-type JoinEvent = { roomId: string; username: string };
+type JoinEvent = { gameId: string; username: string };
