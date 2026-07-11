@@ -25,7 +25,7 @@ export function Home() {
               <p className="mx-auto text-2xl">Host</p>
             </div>
           </Link>
-          <Link to="/client" className="w-full">
+          <Link to="/play" className="w-full">
             <div className="border-2 border-neutral-content rounded-2xl h-[25vh] w-full flex flex-col hover:cursor-pointer hover:bg-base-300">
               <Smartphone className="m-auto h-[80%] w-[80%]" strokeWidth={1} />
               <p className="mx-auto text-2xl">Spieler</p>

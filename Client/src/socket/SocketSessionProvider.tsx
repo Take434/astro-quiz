@@ -31,7 +31,7 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
         )
       ) {
         socket.emit("game:rejoin", true);
-        setSocketSession({ ...socketSession!, game: data });
+        setSocketSession({ socket: socket, game: data });
       } else {
         socket.emit("game:rejoin", false);
       }
@@ -39,8 +39,8 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
 
     socket.on("disconnect", () => {});
 
-    socket.on("player:joined", (data: any) => {
-      console.log(data);
+    socket.on("game:host", (data: SocketSessionGameState) => {
+      setSocketSession({ socket: socket, game: data });
     });
 
     socket.connect();
