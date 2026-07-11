@@ -13,6 +13,13 @@ export function registerHostHandlers(socket: Socket) {
     );
     socket.join(`game:${id}`);
 
+    const game = {
+      id: id,
+      isHost: true,
+    };
+
+    socket.emit("game:host", game);
+
     socket.request.session.gameId = String(id);
     await socket.request.session.save();
   });

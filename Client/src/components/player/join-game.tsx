@@ -1,3 +1,5 @@
+import { joinGame } from "#/services/game-service";
+import { useSocketSession } from "#/socket/SocketSessionProvider";
 import { PlayerStateValue, usePlayerState } from "#/stores/playerState";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
@@ -33,7 +35,12 @@ const iconOptions: string[] = [
 export function PlayerJoinGame() {
   const updatePlayerState = usePlayerState().setPlayerState;
   const [playerIcon, setPlayerIcon] = useState<string>("👽");
+  const [userName, setUserName] = useState<string>("");
+  const [gameCode, setGameCode] = useState<string>("");
+  const socketSession = useSocketSession();
+
   const startGame = () => {
+    joinGame(socketSession.socket, gameCode, `${playerIcon}|${userName}`);
     updatePlayerState(PlayerStateValue.Wait);
   };
 
@@ -48,7 +55,11 @@ export function PlayerJoinGame() {
         <div className="mt-5">
           <label className="input w-full">
             <span className="label">Code</span>
-            <input type="text" placeholder="" />
+            <input
+              type="text"
+              placeholder=""
+              onChange={(x) => setGameCode(x.target.value)}
+            />
           </label>
         </div>
         <div className="mt-5 flex">
@@ -86,7 +97,12 @@ export function PlayerJoinGame() {
               </div>
             </li>
           </ul>
-          <input className="input" type="text" placeholder="Hanz Wurst" />
+          <input
+            className="input"
+            type="text"
+            placeholder="Hanz Wurst"
+            onChange={(x) => setUserName(x.target.value)}
+          />
         </div>
         <div className="flex justify-end mt-5">
           <button

@@ -1,3 +1,5 @@
+import { hostGame } from "#/services/game-service";
+import { useSocketSession } from "#/socket/SocketSessionProvider";
 import { HostStateValue, useHostState } from "#/stores/hostState";
 import { useState } from "react";
 
@@ -11,6 +13,8 @@ type quiz = {
 export function HostCreateGame() {
   const [selectedQuiz, setSelectedQuiz] = useState<string>("");
   const updateHostState = useHostState().setHostState;
+  const socketSession = useSocketSession();
+
   const quizzs: quiz[] = [
     {
       id: "abc123",
@@ -22,6 +26,7 @@ export function HostCreateGame() {
   ];
 
   const startGame = () => {
+    hostGame(socketSession.socket);
     updateHostState(HostStateValue.JoinGame);
   };
 
