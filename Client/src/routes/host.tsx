@@ -1,9 +1,12 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { rootRoute } from "#/App";
+import { createRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/host')({
+export const hostRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/host",
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
-  return <div>Hello "/host"!</div>
+  return <div>Hello "/host"!</div>;
 }

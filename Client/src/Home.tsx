@@ -1,9 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { LaptopMinimal, Smartphone } from "lucide-react";
 
-export const Route = createFileRoute("/")({ component: Home });
-
-function Home() {
+export function Home() {
   return (
     <div className="p-8 flex h-screen">
       <div className="m-auto">
