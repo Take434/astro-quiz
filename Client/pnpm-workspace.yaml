@@ -1,0 +1,3 @@
+minimumReleaseAgeExclude:
+  - daisyui
+  - shell-quote
