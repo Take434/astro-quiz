@@ -1,4 +1,4 @@
-import { rootRoute } from "#/App";
+import { rootRoute } from "#/app";
 import { createRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
