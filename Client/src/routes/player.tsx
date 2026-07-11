@@ -1,9 +1,9 @@
+import { rootRoute } from "#/app";
+import { useSocket } from "#/socket/SocketSessionProvider";
 import { createRoute } from "@tanstack/react-router";
 import type { Socket } from "socket.io-client";
-import { useSocket } from "../socket/SocketSessionProvider.tsx";
-import { rootRoute } from "../App.tsx";
 
-export const clientRoute = createRoute({
+export const playerRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/client",
   component: RouteComponent,

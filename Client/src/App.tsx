@@ -5,10 +5,10 @@ import {
   Outlet,
   RouterProvider,
 } from "@tanstack/react-router";
-import { clientRoute } from "./routes/client";
-import { Home } from "./Home";
+import { playerRoute } from "./routes/player";
 import { hostRoute } from "./routes/host";
 import { SocketSessionProvider } from "./socket/SocketSessionProvider";
+import { Home } from "./Home";
 
 export const rootRoute = createRootRoute({
   component: () => (
@@ -18,22 +18,16 @@ export const rootRoute = createRootRoute({
   ),
 });
 
-// routes for individual pages should be declared within their respective directory
-// this is placeholder and will be deleted later
 const homeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
   component: Home,
 });
 
-const routeTree = rootRoute.addChildren([homeRoute, clientRoute, hostRoute]);
+const routeTree = rootRoute.addChildren([homeRoute, playerRoute, hostRoute]);
 
 export const router = createRouter({
   routeTree,
-  context: {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    auth: undefined!,
-  },
 });
 
 function InnerApp() {
