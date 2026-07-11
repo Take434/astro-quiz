@@ -28,10 +28,11 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
       if (
         confirm(
           "Du bist bereits in einem Spiel, möchtest du beitreten? " +
-            data.gameid,
+            data.gameId,
         )
       ) {
         socket.emit("game:rejoin", true);
+        setSocketSession({ ...socketSession!, gameId: data.gameId });
       } else {
         socket.emit("game:rejoin", false);
       }

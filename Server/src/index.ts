@@ -54,12 +54,12 @@ io.on("connection", (socket) => {
       return;
     }
 
-    const gameid = session.gameid;
+    const gameid = session.gameId;
 
     if (gameid) {
       socket.join(`game:${gameid}`);
       socket.emit("game:rejoin", {
-        gameid: gameid,
+        gameId: gameid,
       });
     }
 
@@ -78,7 +78,7 @@ io.on("connection", (socket) => {
   void persistSession();
 
   socket.on("session:log", async () => {
-    console.log(session.gameid);
+    console.log(session.gameId);
   });
 
   socket.on("console:clear", () => {
@@ -87,15 +87,13 @@ io.on("connection", (socket) => {
 
   socket.on("game:rejoin", async (value: boolean) => {
     if (!value) {
-      socket.request.session.gameid = undefined;
+      socket.request.session.gameId = undefined;
       await socket.request.session.save();
     }
   });
 
   registerPlayerHandlers(socket, io);
   registerHostHandlers(socket);
-
-  console.log("successfully registed all socket-listeners");
 });
 
 console.log("webserver started");
@@ -123,11 +121,11 @@ declare module "express-session" {
 declare module "http" {
   interface IncomingMessage {
     session: Session & {
-      gameid?: string;
+      gameId?: string;
     };
   }
 }
 
 export type User = {
-  gameid: string;
+  gameId: string;
 };

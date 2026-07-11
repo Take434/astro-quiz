@@ -13,7 +13,7 @@ export function registerHostHandlers(socket: Socket) {
     );
     socket.join(`game:${id}`);
 
-    socket.request.session.gameid = String(id);
+    socket.request.session.gameId = String(id);
     await socket.request.session.save();
   });
 }
