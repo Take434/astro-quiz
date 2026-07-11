@@ -15,6 +15,6 @@ export interface HostState {
 }
 
 export const useHostState = create<HostState>((set) => ({
-  hostState: HostStateValue.JoinGame,
+  hostState: HostStateValue.CreateGame,
   setHostState: (state: HostStateValue) => set({ hostState: state }),
 }));

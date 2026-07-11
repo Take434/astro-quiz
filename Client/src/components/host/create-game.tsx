@@ -34,14 +34,8 @@ export function HostCreateGame() {
         <p className="mt-1">
           Erstell eine Spiel dem andere Spieler beitreten können.
         </p>
-        <p>Vergib einen Namen und such das Quiz aus</p>
-        <div className="mt-5">
-          <label className="input w-full">
-            <span className="label">Name</span>
-            <input type="text" placeholder="" />
-          </label>
-        </div>
-        <div className="flex gap-5 mt-5 w-full flex-col">
+        <p>Such dir eins der Quizzes von unten aus und leg los.</p>
+        <div className="flex gap-5 mt-10 w-full flex-col">
           {quizzs.map((x) => (
             <QuizPreview
               q={x}
