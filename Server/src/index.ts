@@ -5,7 +5,7 @@ import session, { Session } from "express-session";
 import { redisClient, redisGameStore, redisSessionStore } from "./redis";
 import { registerPlayerHandlers } from "./services/player-service";
 import { registerHostHandlers } from "./services/host-service";
-import { Game } from "./types/game.model";
+import { Game, GameState } from "./types/game.model";
 import { registerQuizHandlers } from "./services/quiz-service";
 
 const app: Express = express();
@@ -61,10 +61,12 @@ io.on("connection", (socket) => {
 
       if (game) {
         socket.join(`game:${gameId}`);
-        socket.emit("game:rejoin", {
+        const gameState: GameState = {
           id: gameId,
           isHost: game.host === session.id,
-        });
+          state: game.state,
+        };
+        socket.emit("game:rejoin", gameState);
       }
     }
 

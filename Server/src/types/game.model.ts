@@ -11,3 +11,9 @@ export enum HostStateValue {
   Leaderboard,
   AwardCeremony,
 }
+
+export type GameState = {
+  id: string;
+  isHost: boolean;
+  state: HostStateValue;
+};

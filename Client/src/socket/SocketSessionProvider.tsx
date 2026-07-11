@@ -1,3 +1,5 @@
+import { useHostState, type HostStateValue } from "#/stores/hostState";
+import { usePlayerState } from "#/stores/playerState";
 import {
   createContext,
   useContext,
@@ -13,6 +15,9 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
   const [socketSession, setSocketSession] = useState<SocketSessionState | null>(
     null,
   );
+
+  const updateHostState = useHostState().setHostState;
+  const updatePlayerState = usePlayerState().setPlayerState;
 
   useEffect(() => {
     const socket = io("http://localhost:3000", {
@@ -31,6 +36,10 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
         )
       ) {
         socket.emit("game:rejoin", true);
+        if (data.isHost) {
+          updateHostState(data.state);
+        } else {
+        }
         setSocketSession({ socket: socket, game: data });
       } else {
         socket.emit("game:rejoin", false);
@@ -75,4 +84,5 @@ type SocketSessionState = {
 type SocketSessionGameState = {
   id: number;
   isHost: boolean;
+  state: HostStateValue;
 };

@@ -1,10 +1,10 @@
 import { Socket } from "socket.io";
 import { redisClient, redisGameStore } from "../redis";
-import { Game, HostStateValue } from "../types/game.model";
+import { Game, GameState, HostStateValue } from "../types/game.model";
 
 export function registerHostHandlers(socket: Socket) {
   socket.on("game:host", async (data: HostGameEvent) => {
-    const id = await redisClient.incr("game:id");
+    const id = String(await redisClient.incr("game:id"));
     const sessionId = socket.request.session.id;
     await redisGameStore.set<Game>(
       String(id),
@@ -15,9 +15,10 @@ export function registerHostHandlers(socket: Socket) {
     );
     socket.join(`game:${id}`);
 
-    const game = {
+    const game: GameState = {
       id: id,
       isHost: true,
+      state: HostStateValue.JoinGame,
     };
 
     socket.emit("game:host", game);
