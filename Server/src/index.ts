@@ -1,12 +1,11 @@
 import express, { type Express, type Request, type Response } from "express";
-import { createServer, request } from "node:http";
+import { createServer } from "node:http";
 import { Server } from "socket.io";
 import session, { Session } from "express-session";
-import { RedisStore } from "connect-redis";
-import { createClient, RedisClientType } from "redis";
 import { redisClient, redisGameStore, redisSessionStore } from "./redis";
 import { registerPlayerHandlers } from "./services/player-service";
 import { registerHostHandlers } from "./services/host-service";
+import { Game } from "./types/game.model";
 
 const app: Express = express();
 const server = createServer(app);
@@ -54,13 +53,18 @@ io.on("connection", (socket) => {
       return;
     }
 
-    const gameid = session.gameId;
+    const gameId = session.gameId;
 
-    if (gameid) {
-      socket.join(`game:${gameid}`);
-      socket.emit("game:rejoin", {
-        gameId: gameid,
-      });
+    if (gameId) {
+      const game = await redisGameStore.get<Game>(gameId);
+
+      if (game) {
+        socket.join(`game:${gameId}`);
+        socket.emit("game:rejoin", {
+          id: gameId,
+          isHost: game.host === session.id,
+        });
+      }
     }
 
     session.touch();

@@ -24,15 +24,14 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
 
     socket.on("connect", () => {});
 
-    socket.on("game:rejoin", (data: any) => {
+    socket.on("game:rejoin", (data: SocketSessionGameState) => {
       if (
         confirm(
-          "Du bist bereits in einem Spiel, möchtest du beitreten? " +
-            data.gameId,
+          "Du bist bereits in einem Spiel, möchtest du beitreten? " + data.id,
         )
       ) {
         socket.emit("game:rejoin", true);
-        setSocketSession({ ...socketSession!, gameId: data.gameId });
+        setSocketSession({ ...socketSession!, game: data });
       } else {
         socket.emit("game:rejoin", false);
       }
@@ -70,5 +69,10 @@ export function useSocketSession() {
 
 type SocketSessionState = {
   socket: Socket;
-  gameId?: number;
+  game?: SocketSessionGameState;
+};
+
+type SocketSessionGameState = {
+  id: number;
+  isHost: boolean;
 };

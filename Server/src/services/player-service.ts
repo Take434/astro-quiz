@@ -12,7 +12,7 @@ export function registerPlayerHandlers(socket: Socket, io: Server) {
         player: data.username,
       });
 
-      socket.request.session.gameid = data.gameId;
+      socket.request.session.gameId = data.gameId;
       await socket.request.session.save();
     }
   });
