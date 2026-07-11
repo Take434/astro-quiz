@@ -2,7 +2,7 @@ import { rootRoute } from "#/app";
 import { createRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
-export const clientRoute = createRoute({
+export const playerRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/client",
   component: RouteComponent,
@@ -10,5 +10,5 @@ export const clientRoute = createRoute({
 
 function RouteComponent() {
   const [test, useTest] = useState("test");
-  return <div>Hello "/client"! {test}</div>;
+  return <div>Hello "/player"! {test}</div>;
 }
