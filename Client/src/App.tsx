@@ -8,6 +8,7 @@ import {
 import { clientRoute } from "./routes/client";
 import { Home } from "./Home";
 import { hostRoute } from "./routes/host";
+import { SocketSessionProvider } from "./socket/SocketSessionProvider";
 
 export const rootRoute = createRootRoute({
   component: () => (
@@ -36,8 +37,11 @@ export const router = createRouter({
 });
 
 function InnerApp() {
-  // const auth = useAuth();
-  return <RouterProvider router={router} />;
+  return (
+    <SocketSessionProvider>
+      <RouterProvider router={router} />
+    </SocketSessionProvider>
+  );
 }
 
 export function App() {
