@@ -6,6 +6,7 @@ import { redisClient, redisGameStore, redisSessionStore } from "./redis";
 import { registerPlayerHandlers } from "./services/player-service";
 import { registerHostHandlers } from "./services/host-service";
 import { Game } from "./types/game.model";
+import { registerQuizHandlers } from "./services/quiz-service";
 
 const app: Express = express();
 const server = createServer(app);
@@ -98,6 +99,7 @@ io.on("connection", (socket) => {
 
   registerPlayerHandlers(socket, io);
   registerHostHandlers(socket);
+  registerQuizHandlers(socket);
 });
 
 console.log("webserver started");
