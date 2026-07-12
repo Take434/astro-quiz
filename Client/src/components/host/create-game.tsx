@@ -29,6 +29,7 @@ export function HostCreateGame() {
         <div className="flex gap-5 mt-10 w-full flex-col">
           {quizzes?.map((x) => (
             <QuizPreview
+              key={x.id}
               q={x}
               selected={x.id === selectedQuiz}
               setSelected={setSelectedQuiz}

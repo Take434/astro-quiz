@@ -1,6 +1,7 @@
 import { rootRoute } from "#/app";
 import { HostCreateGame } from "#/components/host/create-game";
 import { HostJoinGame } from "#/components/host/join-game";
+import { HostQuestion } from "#/components/host/question";
 import { HostStateValue, useHostState } from "#/stores/hostState";
 import { createRoute } from "@tanstack/react-router";
 
@@ -17,6 +18,7 @@ function RouteComponent() {
     <>
       {hostState === HostStateValue.CreateGame && <HostCreateGame />}
       {hostState === HostStateValue.JoinGame && <HostJoinGame />}
+      {hostState === HostStateValue.Question && <HostQuestion />}
     </>
   );
 }
