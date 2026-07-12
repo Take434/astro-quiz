@@ -3,7 +3,7 @@ import { useSocketSession } from "#/socket/SocketSessionProvider";
 import { QuestionType, useQuestionState } from "#/stores/questionState";
 import { useEffect, useState } from "react";
 
-function typeToBadge(t: QuestionType) {
+export function typeToBadge(t: QuestionType) {
   switch (t) {
     case QuestionType.MultipleChoice:
       return "Multipe Choice";
@@ -16,7 +16,7 @@ function typeToBadge(t: QuestionType) {
   }
 }
 
-function typeToExplainer(t: QuestionType) {
+export function typeToExplainer(t: QuestionType) {
   switch (t) {
     case QuestionType.MultipleChoice:
       return "Wähle aus den Antwortmöglichkeiten aus. Es können auch mehrere Antworten richtig sein";
