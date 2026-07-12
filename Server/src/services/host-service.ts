@@ -93,12 +93,6 @@ const registerContinueGame = (socket: Socket, io: Server) =>
         break;
       case HostStateValue.QuestionReveal:
         game.state = HostStateValue.Leaderboard;
-        const result = game?.players.map((item) => ({
-          username: item.username,
-          score: item.score,
-        }));
-
-        socket.emit("game:leaderboard", result);
         break;
       case HostStateValue.Leaderboard:
         if (quiz?.questions.length === game.questionStep) {
@@ -132,6 +126,7 @@ const registerContinueGame = (socket: Socket, io: Server) =>
     socket.emit("host:state", {
       state: game.state,
       question: question,
+      players: game.players,
     });
   });
 

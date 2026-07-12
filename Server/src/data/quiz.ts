@@ -53,12 +53,16 @@ export const allQuizzes: Quiz[] = [
             id: 3,
             text: "Mond",
           },
+          {
+            id: 4,
+            text: "Saturn",
+          },
         ],
-        correctAnswers: [1, 2, 3],
+        correctAnswers: [1, 4],
       },
       {
         id: 1,
-        type: QuestionTypeValue.MultipleChoice,
+        type: QuestionTypeValue.Order,
         question:
           "Bringe die Planeten aus unserem Sonnensystem in die richtige Reihenfolge nach Abstand zur Sonne",
         possibleAnswers: [
@@ -101,10 +105,69 @@ export const allQuizzes: Quiz[] = [
   },
   {
     id: 2,
-    title: "Astronomie WiSe 26",
+    title: "Order Test",
     description: "Ein Quiz zu den Inhalten des Kurses im Sommer Semester 26",
     cover:
       "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-    questions: [],
+    questions: [
+      {
+        id: 1,
+        type: QuestionTypeValue.Order,
+        question:
+          "Bringe die Planeten aus unserem Sonnensystem in die richtige Reihenfolge nach Abstand zur Sonne",
+        possibleAnswers: [
+          {
+            id: 1,
+            text: "Merkur",
+          },
+          {
+            id: 2,
+            text: "Venus",
+          },
+          {
+            id: 3,
+            text: "Erde",
+          },
+          {
+            id: 4,
+            text: "Mars",
+          },
+          {
+            id: 5,
+            text: "Jupiter",
+          },
+          {
+            id: 6,
+            text: "Saturn",
+          },
+          {
+            id: 7,
+            text: "Uranus",
+          },
+          {
+            id: 8,
+            text: "Neptun",
+          },
+        ],
+        correctAnswers: [1, 2, 3, 4, 5, 6, 7, 8],
+      },
+    ],
+  },
+  {
+    id: 3,
+    title: "Higher Lower Test",
+    description: "Ein Quiz zu den Inhalten des Kurses im Sommer Semester 26",
+    cover:
+      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
+    questions: [
+      {
+        id: 1,
+        type: QuestionTypeValue.HigherLower,
+        question:
+          "Die Sonne ist 2 Astronomische Einheiten von der Erde entfernt",
+        possibleAnswers: [],
+        correctAnswers: [-1],
+      },
+    ],
   },
 ];

@@ -4,7 +4,7 @@ import { useHostState } from "#/stores/hostState";
 import { CircleStar } from "lucide-react";
 
 export function HostLeaderBoard() {
-  const playerScores = useHostState().leaderboard;
+  const playerScores = useHostState().players;
   const socketSession = useSocketSession();
 
   const nextQuestion = () => {
@@ -33,6 +33,7 @@ export function HostLeaderBoard() {
                 {i === 0 && <CircleStar color="gold" />}
                 {i === 1 && <CircleStar color="silver" />}
                 {i === 2 && <CircleStar color="brown" />}
+                <p className="truncate w-full text-lg align-middle">{x.icon}</p>
                 <p className="truncate w-full text-lg align-middle">
                   {x.username}
                 </p>

@@ -68,12 +68,10 @@ const registerQuestionAnswer = (socket: Socket, io: Server) =>
           const question = quiz?.questions[game.questionStep];
           player.answerCount++;
 
-          if (question?.type === QuestionTypeValue.MultipleChoice) {
-            if (arraysEqualUnordered(question.correctAnswers, answerIds)) {
-              console.log("correct");
-              player.score++;
-            }
-          }
+          const score = calculateScore(question!, answerIds, text);
+          console.log("score", score);
+
+          player.score += score;
 
           redisGameStore.set(gameId, game);
         }
@@ -105,6 +103,44 @@ function arraysEqualUnordered(a: number[], b: number[]): boolean {
   const sortedB = [...b].sort();
 
   return sortedA.every((value, index) => value === sortedB[index]);
+}
+
+function calculateScore(question: Question, answerIds: number[], text: string) {
+  let score: number;
+  switch (question.type) {
+    case QuestionTypeValue.MultipleChoice:
+      // +1 score for correct entry
+      // -1 score for wrong entry
+      score = 0;
+      answerIds.forEach((id) => {
+        if (question.correctAnswers.includes(id)) {
+          score++;
+        } else {
+          score--;
+        }
+      });
+      return score >= 0 ? score : 0;
+    case QuestionTypeValue.HigherLower:
+      // +1 score if correct answer
+      if (question.correctAnswers[0] === answerIds[0]) {
+        return 1;
+      }
+      return 0;
+    case QuestionTypeValue.Order:
+      // +1 score for each entry at correct position
+      score = 0;
+      question.correctAnswers.forEach((id, index) => {
+        if (id === answerIds[index]) {
+          score++;
+        }
+      });
+      return score;
+    case QuestionTypeValue.FreeText:
+      // TODO
+      return 0;
+    default:
+      return 0;
+  }
 }
 
 function getPlayerState(game: Game, userId: string) {

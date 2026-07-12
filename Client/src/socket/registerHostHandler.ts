@@ -26,7 +26,7 @@ export const registerHostStateChange = (
       updatePlayerState(players);
       updateTimer(timer);
 
-      if (state === HostStateValue.Question && question) {
+      if (question) {
         updateQuestionState(question);
       }
     },
