@@ -31,7 +31,7 @@ const example: Question = {
   id: 67,
   question:
     "Welche Planten in unserem Sonnensytem bestehen vollständig aus Gas?",
-  type: QuestionType.MultipleChoice,
+  type: QuestionType.HigherLower,
   image:
     "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/M101_hires_STScI-PRC2006-10a.jpg/1280px-M101_hires_STScI-PRC2006-10a.jpg",
   possibleAnswers: [
@@ -50,25 +50,6 @@ const example: Question = {
     {
       id: 14,
       text: "I know for a fact 9/11 was an inside job",
-    },
-    {
-      id: 1,
-      image:
-        "https://media.tenor.com/oBso-DbE4ZYAAAAM/bernd-das-brot-deutsch.gif",
-    },
-    {
-      id: 2,
-      image:
-        "https://media.tenor.com/M1scMNKh6nQAAAAM/nutricscore-nutri-score.gif",
-    },
-    {
-      id: 3,
-      image: "https://media.tenor.com/8in0iRRvNRoAAAAm/semel-kater.webp",
-    },
-    {
-      id: 4,
-      image:
-        "https://media.tenor.com/77ICN595wI0AAAAM/dinner-for-one-bernd-das-brot.gif",
     },
   ],
   correctAnswers: [4],
