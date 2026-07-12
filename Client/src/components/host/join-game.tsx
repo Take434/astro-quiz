@@ -15,6 +15,7 @@ export function HostJoinGame() {
   return (
     <div className="p-8 flex h-screen">
       <div className="m-auto flex gap-5">
+        {socketSession.game?.id}
         <ul className="list bg-base-300 rounded-box shadow-md w-75">
           {players.map((x) => (
             <li className="list-row p-2">
