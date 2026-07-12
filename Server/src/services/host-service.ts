@@ -102,7 +102,17 @@ const registerContinueGame = (socket: Socket, io: Server) =>
         } else {
           game.state = HostStateValue.Question;
           game.questionStep++;
-          game.questionStep++;
+          question = quiz?.questions[game.questionStep];
+          if (question) {
+            socket.emit("host:state", {
+              state: HostStateValue.Question,
+              question: question,
+            });
+            io.to(`game:${gameId}`).emit("player:state", {
+              state: PlayerStateValue.Question,
+              question: question,
+            });
+          }
         }
         break;
       case HostStateValue.AwardCeremony:
