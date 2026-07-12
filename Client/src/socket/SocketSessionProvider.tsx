@@ -8,6 +8,9 @@ import {
   type ReactNode,
 } from "react";
 import { io, Socket } from "socket.io-client";
+import { useQuestionState } from "#/stores/questionState";
+import { registerPlayerStateChange } from "./registerPlayerHandler";
+import { registerHostStateChange } from "./registerHostHandler";
 
 const SessionContext = createContext<SocketSessionState | null>(null);
 export function SocketSessionProvider({ children }: { children: ReactNode }) {
@@ -17,6 +20,7 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
 
   const updateHostState = useHostState().setHostState;
   const updatePlayerState = usePlayerState().setPlayerState;
+  const updateQuestionState = useQuestionState().setQuestionState;
 
   useEffect(() => {
     const socket = io("http://localhost:3000", {
@@ -50,6 +54,9 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
     socket.on("game:host", (data: SocketSessionGameState) => {
       setSocketSession({ socket: socket, game: data });
     });
+
+    registerPlayerStateChange(socket, updateQuestionState, updatePlayerState);
+    registerHostStateChange(socket, updateQuestionState, updateHostState);
 
     socket.connect();
 

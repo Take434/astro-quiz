@@ -1,11 +1,16 @@
-import { Socket } from "socket.io";
+import { Server, Socket } from "socket.io";
 import { redisClient, redisGameStore } from "../redis";
-import { Game, GameState, HostStateValue } from "../types/game.model";
+import {
+  Game,
+  GameState,
+  HostStateValue,
+  PlayerStateValue,
+} from "../types/game.model";
 import { getAllQuizzes } from "./quiz-service";
 
-export function registerHostHandlers(socket: Socket) {
+export function registerHostHandlers(socket: Socket, io: Server) {
   registerHostGame(socket);
-  registerContinueGame(socket);
+  registerContinueGame(socket, io);
 }
 
 const registerHostGame = (socket: Socket) =>
@@ -36,8 +41,8 @@ const registerHostGame = (socket: Socket) =>
     await socket.request.session.save();
   });
 
-const registerContinueGame = (socket: Socket) =>
-  socket.on("game:continue", async (_, callback) => {
+const registerContinueGame = (socket: Socket, io: Server) =>
+  socket.on("game:continue", async () => {
     const gameId = socket.request.session.gameId;
 
     if (gameId === undefined) {
@@ -56,16 +61,29 @@ const registerContinueGame = (socket: Socket) =>
       (item) => item.id === game.quizId,
     );
 
+    let question = undefined;
+
     switch (game.state) {
       case HostStateValue.JoinGame:
         game.state = HostStateValue.Question;
-        const question = quiz?.questions[game.questionStep];
+        question = quiz?.questions[game.questionStep];
         if (question) {
-          callback({ success: true, question: question });
+          // callback({ success: true, question: question });
+          socket.emit("host:state", {
+            state: HostStateValue.Question,
+            question: question,
+          });
+          io.to(`game:${gameId}`).emit("player:state", {
+            state: PlayerStateValue.Question,
+            question: question,
+          });
         }
         break;
       case HostStateValue.Question:
         game.state = HostStateValue.QuestionReveal;
+        io.to(`game:${gameId}`).emit("player:state", {
+          state: PlayerStateValue.Wait,
+        });
         break;
       case HostStateValue.QuestionReveal:
         game.state = HostStateValue.Leaderboard;
@@ -86,4 +104,9 @@ const registerContinueGame = (socket: Socket) =>
     console.log("GAME:CONTINUED:" + gameId + ":" + game.state);
 
     await redisGameStore.set<Game>(gameId, game);
+
+    socket.emit("host:state", {
+      state: game.state,
+      question: question,
+    });
   });

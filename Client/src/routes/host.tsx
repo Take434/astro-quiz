@@ -19,6 +19,9 @@ function RouteComponent() {
       {hostState === HostStateValue.CreateGame && <HostCreateGame />}
       {hostState === HostStateValue.JoinGame && <HostJoinGame />}
       {hostState === HostStateValue.Question && <HostQuestion />}
+      {hostState === HostStateValue.QuestionReveal && "QuestionReveal..."}
+      {hostState === HostStateValue.Leaderboard && "Leaderboard..."}
+      {hostState === HostStateValue.AwardCeremony && "AwardCeremony..."}
     </>
   );
 }
