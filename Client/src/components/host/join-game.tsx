@@ -14,11 +14,11 @@ export function HostJoinGame() {
   const updateHostState = useHostState().setHostState;
   const [players, setPlayers] = useState<player[]>([]);
   const socketSession = useSocketSession();
+  const updateQuestionStore = useQuestionState().setQuestionState;
 
   const startGame = () => {
     continueGame(socketSession.socket, (data: any) => {
-      const updateQuestionStore = useQuestionState().setQuestionState;
-
+      console.log(data);
       if (data) {
         updateQuestionStore(data.question);
       }

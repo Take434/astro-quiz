@@ -9,25 +9,26 @@ export function registerHostHandlers(socket: Socket) {
 }
 
 const registerHostGame = (socket: Socket) =>
-  socket.on("game:host", async (data: HostGameEvent) => {
+  socket.on("game:host", async (quizId: number) => {
     const id = await redisClient.incr("game:id");
     const sessionId = socket.request.session.id;
-    await redisGameStore.set<Game>(
-      id,
-      (data ?? {}) && {
-        host: sessionId,
-        state: HostStateValue.JoinGame,
-        questionStep: 0,
-      },
-    );
+    await redisGameStore.set<Game>(id, {
+      host: sessionId,
+      quizId: quizId,
+      state: HostStateValue.JoinGame,
+      questionStep: 0,
+    });
     socket.join(`game:${id}`);
 
     const game: GameState = {
       id: id,
+      quizId: quizId,
       isHost: true,
       state: HostStateValue.JoinGame,
       questionStep: 0,
     };
+
+    console.log("GAME:HOSTED:" + id);
 
     socket.emit("game:host", game);
 
@@ -36,14 +37,24 @@ const registerHostGame = (socket: Socket) =>
   });
 
 const registerContinueGame = (socket: Socket) =>
-  socket.on("game:continue", async (gameId: number, callback) => {
+  socket.on("game:continue", async (_, callback) => {
+    const gameId = socket.request.session.gameId;
+
+    if (gameId === undefined) {
+      return;
+    }
+
+    console.log("gameId:", gameId);
     const game = await redisGameStore.get<Game>(gameId);
+    console.log(game);
 
     if (!game || game.host != socket.request.session.id) {
       return;
     }
 
-    const quiz = (await getAllQuizzes()).find((item) => item.id === gameId);
+    const quiz = (await getAllQuizzes()).find(
+      (item) => item.id === game.quizId,
+    );
 
     switch (game.state) {
       case HostStateValue.JoinGame:
@@ -72,7 +83,7 @@ const registerContinueGame = (socket: Socket) =>
         break;
     }
 
+    console.log("GAME:CONTINUED:" + gameId + ":" + game.state);
+
     await redisGameStore.set<Game>(gameId, game);
   });
-
-type HostGameEvent = {};

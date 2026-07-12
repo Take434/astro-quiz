@@ -10,12 +10,12 @@ type Question = {
   id: number;
   image?: string;
   type: QuestionTypeValue;
-  text: string;
-  options: Option[];
-  answers: number[];
+  question: string;
+  possibleAnswers: Answer[];
+  correctAnswers: number[];
 };
 
-type Option = {
+type Answer = {
   id: number;
   text: string;
   image?: string;
@@ -39,8 +39,8 @@ export const allQuizzes: Quiz[] = [
       {
         id: 1,
         type: QuestionTypeValue.Text,
-        text: "Nenne einen Planeten aus unserem Sonnensystem",
-        options: [
+        question: "Nenne einen Planeten aus unserem Sonnensystem",
+        possibleAnswers: [
           {
             id: 1,
             text: "Erde",
@@ -54,13 +54,14 @@ export const allQuizzes: Quiz[] = [
             text: "Mond",
           },
         ],
-        answers: [1, 2, 3],
+        correctAnswers: [1, 2, 3],
       },
       {
         id: 1,
         type: QuestionTypeValue.Text,
-        text: "Bringe die Planeten aus unserem Sonnensystem in die richtige Reihenfolge nach Abstand zur Sonne",
-        options: [
+        question:
+          "Bringe die Planeten aus unserem Sonnensystem in die richtige Reihenfolge nach Abstand zur Sonne",
+        possibleAnswers: [
           {
             id: 1,
             text: "Merkur",
@@ -94,7 +95,7 @@ export const allQuizzes: Quiz[] = [
             text: "Neptun",
           },
         ],
-        answers: [1, 2, 3, 4, 5, 6, 7, 8],
+        correctAnswers: [1, 2, 3, 4, 5, 6, 7, 8],
       },
     ],
   },

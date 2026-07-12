@@ -63,6 +63,7 @@ io.on("connection", (socket) => {
         socket.join(`game:${gameId}`);
         const gameState: GameState = {
           id: gameId,
+          quizId: game.quizId,
           isHost: game.host === session.id,
           state: game.state,
           questionStep: game.questionStep,

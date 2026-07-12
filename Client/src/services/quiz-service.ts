@@ -15,7 +15,7 @@ export const useQuizzes = (socket: Socket): Quiz[] => {
 };
 
 export type Quiz = {
-  id: string;
+  id: number;
   title: string;
   description: string;
   cover: string;

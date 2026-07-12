@@ -5,14 +5,14 @@ import { HostStateValue, useHostState } from "#/stores/hostState";
 import { useEffect, useState } from "react";
 
 export function HostCreateGame() {
-  const [selectedQuiz, setSelectedQuiz] = useState<string>("");
+  const [selectedQuiz, setSelectedQuiz] = useState<number>(0);
   const updateHostState = useHostState().setHostState;
   const socketSession = useSocketSession();
 
   const quizzes = useQuizzes(socketSession.socket);
 
   const startGame = () => {
-    hostGame(socketSession.socket);
+    hostGame(socketSession.socket, selectedQuiz);
     updateHostState(HostStateValue.JoinGame);
   };
 
@@ -56,7 +56,7 @@ function QuizPreview({
 }: {
   q: Quiz;
   selected: boolean;
-  setSelected: (a: string) => void;
+  setSelected: (a: number) => void;
 }) {
   return (
     <div

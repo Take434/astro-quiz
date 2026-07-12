@@ -1,5 +1,6 @@
 export type Game = {
   host: string;
+  quizId: number;
   state: HostStateValue;
   questionStep: number;
 };
@@ -15,6 +16,7 @@ export enum HostStateValue {
 
 export type GameState = {
   id: number;
+  quizId: number;
   isHost: boolean;
   state: HostStateValue;
   questionStep: number;

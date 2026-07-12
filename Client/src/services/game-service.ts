@@ -1,9 +1,8 @@
-import { useQuestionState } from "#/stores/questionState";
 import type { Socket } from "socket.io-client";
 
-export const hostGame = (socket: Socket) => {
+export const hostGame = (socket: Socket, quizId: number) => {
   console.log("hosting...");
-  socket.emit("game:host");
+  socket.emit("game:host", quizId);
 };
 
 export const joinGame = (socket: Socket, gameId: string, username: string) => {
