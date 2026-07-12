@@ -3,6 +3,14 @@ export type Game = {
   quizId: number;
   state: HostStateValue;
   questionStep: number;
+  players: Player[];
+};
+
+export type Player = {
+  id: string;
+  score: number;
+  answerCount: number;
+  username: string;
 };
 
 export enum HostStateValue {

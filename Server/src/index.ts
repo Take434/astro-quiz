@@ -57,7 +57,7 @@ io.on("connection", (socket) => {
     const gameId = session.gameId;
 
     if (gameId) {
-      const game = await redisGameStore.get<Game>(gameId);
+      const game = await redisGameStore.get(gameId);
 
       if (game) {
         socket.join(`game:${gameId}`);
