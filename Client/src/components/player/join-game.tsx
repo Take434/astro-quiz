@@ -40,7 +40,7 @@ export function PlayerJoinGame() {
   const socketSession = useSocketSession();
 
   const startGame = () => {
-    joinGame(socketSession.socket, gameCode, `${playerIcon}|${userName}`);
+    joinGame(socketSession.socket, gameCode, userName, playerIcon);
     updatePlayerState(PlayerStateValue.Wait);
   };
 

@@ -12,7 +12,7 @@ import { useQuestionState } from "#/stores/questionState";
 import { registerPlayerStateChange } from "./registerPlayerHandler";
 import {
   registerHostStateChange,
-  registerLeaderboard,
+  registerPlayers,
 } from "./registerHostHandler";
 
 const SessionContext = createContext<SocketSessionState | null>(null);
@@ -21,8 +21,11 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
     null,
   );
 
-  const { setHostState: updateHostState, setLeaderboard: updateLeaderboard } =
-    useHostState();
+  const {
+    setHostState: updateHostState,
+    setPlayers: updatePlayers,
+    setTimer: updateTimer,
+  } = useHostState();
   const updatePlayerState = usePlayerState().setPlayerState;
   const updateQuestionState = useQuestionState().setQuestionState;
 
@@ -36,20 +39,16 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
 
     socket.on("connect", () => {});
 
-    socket.on("game:rejoin", (data: SocketSessionGameState) => {
+    socket.on("player:rejoin", (data: SocketSessionGameState) => {
+      const url = data.isHost ? "host:rejoin" : "player:rejoin";
       if (
         confirm(
           "Du bist bereits in einem Spiel, möchtest du beitreten? " + data.id,
         )
       ) {
-        socket.emit("game:rejoin", true);
-        if (data.isHost) {
-          updateHostState(data.state);
-        } else {
-        }
-        setSocketSession({ socket: socket, game: data });
+        socket.emit(url, true);
       } else {
-        socket.emit("game:rejoin", false);
+        socket.emit(url, false);
       }
     });
 
@@ -60,8 +59,14 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
     });
 
     registerPlayerStateChange(socket, updateQuestionState, updatePlayerState);
-    registerHostStateChange(socket, updateQuestionState, updateHostState);
-    registerLeaderboard(socket, updateLeaderboard);
+    registerHostStateChange(
+      socket,
+      updateQuestionState,
+      updateHostState,
+      updatePlayers,
+      updateTimer,
+    );
+    registerPlayers(socket, updatePlayers);
 
     socket.connect();
 

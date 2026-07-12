@@ -60,7 +60,6 @@ io.on("connection", (socket) => {
       const game = await redisGameStore.get(gameId);
 
       if (game) {
-        socket.join(`game:${gameId}`);
         const gameState: GameState = {
           id: gameId,
           quizId: game.quizId,
@@ -68,7 +67,7 @@ io.on("connection", (socket) => {
           state: game.state,
           questionStep: game.questionStep,
         };
-        socket.emit("game:rejoin", gameState);
+        socket.emit("player:rejoin", gameState);
       }
     }
 
@@ -92,13 +91,6 @@ io.on("connection", (socket) => {
 
   socket.on("console:clear", () => {
     console.clear();
-  });
-
-  socket.on("game:rejoin", async (value: boolean) => {
-    if (!value) {
-      socket.request.session.gameId = undefined;
-      await socket.request.session.save();
-    }
   });
 
   registerPlayerHandlers(socket, io);

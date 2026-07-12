@@ -1,32 +1,16 @@
 import { continueGame } from "#/services/game-service";
 import { useSocketSession } from "#/socket/SocketSessionProvider";
-import { useEffect, useState } from "react";
+import { useHostState } from "#/stores/hostState";
 import QRCode from "react-qr-code";
 
-type player = {
-  icon: string;
-  name: string;
-};
-
 export function HostJoinGame() {
-  const [players, setPlayers] = useState<player[]>([]);
   const socketSession = useSocketSession();
+
+  const players = useHostState().players;
 
   const startGame = () => {
     continueGame(socketSession.socket);
   };
-
-  useEffect(() => {
-    socketSession.socket.on(
-      "player:joined",
-      ({ player }: { player: string }) => {
-        setPlayers((prev) => [
-          ...prev,
-          { icon: player.split("|")[0], name: player.split("|")[1] },
-        ]);
-      },
-    );
-  });
 
   return (
     <div className="p-8 flex h-screen">
@@ -35,7 +19,7 @@ export function HostJoinGame() {
           {players.map((x) => (
             <li className="list-row p-2">
               <div>{x.icon}</div>
-              <p className="truncate w-full">{x.name}</p>
+              <p className="truncate w-full">{x.username}</p>
             </li>
           ))}
         </ul>

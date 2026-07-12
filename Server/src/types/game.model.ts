@@ -4,6 +4,7 @@ export type Game = {
   state: HostStateValue;
   questionStep: number;
   players: Player[];
+  timer?: number;
 };
 
 export type Player = {
@@ -11,6 +12,7 @@ export type Player = {
   score: number;
   answerCount: number;
   username: string;
+  icon: string;
 };
 
 export enum HostStateValue {

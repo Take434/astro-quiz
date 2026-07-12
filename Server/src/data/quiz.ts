@@ -6,7 +6,7 @@ export type Quiz = {
   questions: Question[];
 };
 
-type Question = {
+export type Question = {
   id: number;
   image?: string;
   type: QuestionTypeValue;
@@ -22,10 +22,10 @@ type Answer = {
 };
 
 export enum QuestionTypeValue {
-  Multiple,
-  Order,
-  Text,
+  MultipleChoice,
+  FreeText,
   HigherLower,
+  Order,
 }
 
 export const allQuizzes: Quiz[] = [
@@ -38,7 +38,7 @@ export const allQuizzes: Quiz[] = [
     questions: [
       {
         id: 1,
-        type: QuestionTypeValue.Multiple,
+        type: QuestionTypeValue.MultipleChoice,
         question: "Nenne einen Planeten aus unserem Sonnensystem",
         possibleAnswers: [
           {
@@ -58,7 +58,7 @@ export const allQuizzes: Quiz[] = [
       },
       {
         id: 1,
-        type: QuestionTypeValue.Text,
+        type: QuestionTypeValue.MultipleChoice,
         question:
           "Bringe die Planeten aus unserem Sonnensystem in die richtige Reihenfolge nach Abstand zur Sonne",
         possibleAnswers: [

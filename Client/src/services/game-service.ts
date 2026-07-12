@@ -5,8 +5,13 @@ export const hostGame = (socket: Socket, quizId: number) => {
   socket.emit("game:host", quizId);
 };
 
-export const joinGame = (socket: Socket, gameId: string, username: string) => {
-  socket.emit("game:join", { gameId: gameId, username: username });
+export const joinGame = (
+  socket: Socket,
+  gameId: string,
+  username: string,
+  icon: string,
+) => {
+  socket.emit("game:join", { gameId: gameId, username: username, icon: icon });
 };
 
 export const rejoinGame = (socket: Socket) => {

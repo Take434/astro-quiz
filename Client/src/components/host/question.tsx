@@ -1,5 +1,6 @@
 import { continueGame } from "#/services/game-service";
 import { useSocketSession } from "#/socket/SocketSessionProvider";
+import { HostStateValue, useHostState } from "#/stores/hostState";
 import { QuestionType, useQuestionState } from "#/stores/questionState";
 import { useEffect, useState } from "react";
 
@@ -32,13 +33,25 @@ function typeToExplainer(t: QuestionType) {
 export function HostQuestion() {
   const question = useQuestionState().questionState;
   const socketSession = useSocketSession();
-  const [countdown, setCountdown] = useState<number>(60);
+
+  const { timer, hostState } = useHostState();
+
+  const [countdown, setCountdown] = useState<number>(timer ?? 60);
 
   useEffect(() => {
-    setTimeout(() => {
+    if (countdown <= 0) {
+      if (hostState === HostStateValue.Question) {
+        continueGame(socketSession.socket);
+      }
+      return;
+    }
+
+    const timeout = setTimeout(() => {
       setCountdown((prev) => prev - 1);
     }, 1000);
-  });
+
+    return () => clearTimeout(timeout);
+  }, [countdown]);
 
   if (!question) {
     return <>Keine Frage</>;
