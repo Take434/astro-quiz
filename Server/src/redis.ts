@@ -26,7 +26,7 @@ export const redisSessionStore = new RedisStore({
 });
 
 export const redisGameStore = {
-  async get<T>(gameId: string): Promise<T | null> {
+  async get<T>(gameId: number): Promise<T | null> {
     const data = await redisClient.get(`game:${gameId}`);
 
     if (!data) {
@@ -36,13 +36,13 @@ export const redisGameStore = {
     return JSON.parse(data);
   },
 
-  async set<T>(gameId: string, game: T) {
+  async set<T>(gameId: number, game: T) {
     await redisClient.set(`game:${gameId}`, JSON.stringify(game), {
       expiration: { type: "EX", value: 60 * 60 * 2 }, // expire after 2 hours
     });
   },
 
-  async delete(gameId: string) {
+  async delete(gameId: number) {
     await redisClient.del(`game:${gameId}`);
   },
 };

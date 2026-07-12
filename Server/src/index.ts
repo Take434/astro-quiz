@@ -65,6 +65,7 @@ io.on("connection", (socket) => {
           id: gameId,
           isHost: game.host === session.id,
           state: game.state,
+          questionStep: game.questionStep,
         };
         socket.emit("game:rejoin", gameState);
       }
@@ -129,11 +130,11 @@ declare module "express-session" {
 declare module "http" {
   interface IncomingMessage {
     session: Session & {
-      gameId?: string;
+      gameId?: number;
     };
   }
 }
 
 export type User = {
-  gameId: string;
+  gameId: number;
 };

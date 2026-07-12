@@ -1,22 +1,25 @@
 import { Socket } from "socket.io";
 import path from "node:path";
 import fs from "fs";
+import { Game, HostStateValue } from "../types/game.model";
+import { redisGameStore } from "../redis";
+import { allQuizzes, Quiz } from "../data/quiz";
 
 export function registerQuizHandlers(socket: Socket) {
   socket.on("quiz:getAll", async (data, callback) => {
-    const filePath = path.join(__dirname, "../", "data", "quiz.json");
+    console.log("hii");
+    const quizzes = getAllQuizzes();
 
-    // let content;
+    console.log(quizzes);
 
-    await fs.readFile(filePath, (err, json) => {
-      const jsonObject = JSON.parse(json.toString());
-
-      callback({
-        success: true,
-        quizzes: jsonObject,
-      });
+    callback({
+      success: true,
+      quizzes: quizzes,
     });
-
-    // return JSON.parse(content);
   });
 }
+
+export const getAllQuizzes = (): Quiz[] => {
+  const quizzes = allQuizzes;
+  return quizzes;
+};
