@@ -6,6 +6,7 @@ import { Player } from "../types/game.model";
 
 export function registerPlayerHandlers(socket: Socket, io: Server) {
   registerGameJoin(socket, io);
+  registerQuestionAnswer(socket, io);
 }
 
 const registerGameJoin = (socket: Socket, io: Server) =>
@@ -42,6 +43,7 @@ const registerQuestionAnswer = (socket: Socket, io: Server) =>
   socket.on(
     "question:answer",
     async ({ answerIds, text }: { answerIds: number[]; text: string }) => {
+      console.log("GAME:QUESTION:ANSWER");
       const gameId = socket.request.session.gameId;
       if (!gameId) return;
       const game = await redisGameStore.get(gameId);
@@ -52,7 +54,7 @@ const registerQuestionAnswer = (socket: Socket, io: Server) =>
         (item) => item.id === socket.request.session.id,
       );
 
-      if (player && game.questionStep > player.answerCount) {
+      if (player && game.questionStep === player.answerCount) {
         console.log("user may answer");
         const quizzes = getAllQuizzes();
 
@@ -63,6 +65,8 @@ const registerQuestionAnswer = (socket: Socket, io: Server) =>
           if (question?.type === QuestionTypeValue.Multiple) {
             if (arraysEqualUnordered(question.correctAnswers, answerIds)) {
               console.log("correct");
+              player.score++;
+              redisGameStore.set(gameId, game);
             }
           }
         }

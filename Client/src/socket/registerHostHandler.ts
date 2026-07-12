@@ -1,4 +1,4 @@
-import { HostStateValue } from "#/stores/hostState";
+import { HostStateValue, type PlayerScores } from "#/stores/hostState";
 import type { Question } from "#/stores/questionState";
 import type { Socket } from "socket.io-client";
 
@@ -19,3 +19,12 @@ export const registerHostStateChange = (
       }
     },
   );
+
+export const registerLeaderboard = (
+  socket: Socket,
+  updateLeaderboard: (leaderboard: PlayerScores[]) => void,
+) =>
+  socket.on("game:leaderboard", (leaderboard: PlayerScores[]) => {
+    console.log(leaderboard);
+    updateLeaderboard(leaderboard);
+  });

@@ -1,3 +1,4 @@
+import { useSocketSession } from "#/socket/SocketSessionProvider";
 import { PlayerStateValue, usePlayerState } from "#/stores/playerState";
 import type { Question } from "#/stores/questionState";
 import { useState } from "react";
@@ -5,6 +6,7 @@ import { useState } from "react";
 export function PlayerMultipleCoice({ q }: { q: Question }) {
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const updatePlayerState = usePlayerState().setPlayerState;
+  const socketSession = useSocketSession();
 
   const clickedAnswer = (id: number) => {
     const index = selectedAnswers.findIndex((x) => x === id);
@@ -23,6 +25,9 @@ export function PlayerMultipleCoice({ q }: { q: Question }) {
     }
 
     updatePlayerState(PlayerStateValue.Wait);
+    socketSession.socket.emit("question:answer", {
+      answerIds: selectedAnswers,
+    });
   };
 
   return (

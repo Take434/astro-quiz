@@ -10,7 +10,10 @@ import {
 import { io, Socket } from "socket.io-client";
 import { useQuestionState } from "#/stores/questionState";
 import { registerPlayerStateChange } from "./registerPlayerHandler";
-import { registerHostStateChange } from "./registerHostHandler";
+import {
+  registerHostStateChange,
+  registerLeaderboard,
+} from "./registerHostHandler";
 
 const SessionContext = createContext<SocketSessionState | null>(null);
 export function SocketSessionProvider({ children }: { children: ReactNode }) {
@@ -18,7 +21,8 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
     null,
   );
 
-  const updateHostState = useHostState().setHostState;
+  const { setHostState: updateHostState, setLeaderboard: updateLeaderboard } =
+    useHostState();
   const updatePlayerState = usePlayerState().setPlayerState;
   const updateQuestionState = useQuestionState().setQuestionState;
 
@@ -57,6 +61,7 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
 
     registerPlayerStateChange(socket, updateQuestionState, updatePlayerState);
     registerHostStateChange(socket, updateQuestionState, updateHostState);
+    registerLeaderboard(socket, updateLeaderboard);
 
     socket.connect();
 
