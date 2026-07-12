@@ -14,6 +14,14 @@ export enum HostStateValue {
   AwardCeremony,
 }
 
+export enum PlayerStateValue {
+  JoinGame,
+  Question,
+  Wait,
+  AwardCeremony,
+  Debug,
+}
+
 export type GameState = {
   id: number;
   quizId: number;

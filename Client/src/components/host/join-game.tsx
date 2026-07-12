@@ -1,7 +1,5 @@
 import { continueGame } from "#/services/game-service";
 import { useSocketSession } from "#/socket/SocketSessionProvider";
-import { HostStateValue, useHostState } from "#/stores/hostState";
-import { useQuestionState } from "#/stores/questionState";
 import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 
@@ -11,19 +9,11 @@ type player = {
 };
 
 export function HostJoinGame() {
-  const updateHostState = useHostState().setHostState;
   const [players, setPlayers] = useState<player[]>([]);
   const socketSession = useSocketSession();
-  const updateQuestionStore = useQuestionState().setQuestionState;
 
   const startGame = () => {
-    continueGame(socketSession.socket, (data: any) => {
-      console.log(data);
-      if (data) {
-        updateQuestionStore(data.question);
-      }
-    });
-    updateHostState(HostStateValue.Question);
+    continueGame(socketSession.socket);
   };
 
   useEffect(() => {

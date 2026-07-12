@@ -19,6 +19,8 @@ function RouteComponent() {
       {playerState === PlayerStateValue.JoinGame && <PlayerJoinGame />}
       {playerState === PlayerStateValue.Question && <PlayerQuestion />}
       {playerState === PlayerStateValue.Debug && <PlayerDebug />}
+      {playerState === PlayerStateValue.Wait && "Waiting...."}
+      {playerState === PlayerStateValue.AwardCeremony && "AwardCeremony..."}
     </>
   );
 }

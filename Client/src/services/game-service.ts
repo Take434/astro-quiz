@@ -14,6 +14,6 @@ export const rejoinGame = (socket: Socket) => {
 };
 
 /**updated game state according to backend state machine */
-export const continueGame = (socket: Socket, callback: (data: any) => void) => {
-  socket.emit("game:continue", {}, callback);
+export const continueGame = (socket: Socket) => {
+  socket.emit("game:continue");
 };

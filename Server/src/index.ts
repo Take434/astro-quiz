@@ -102,7 +102,7 @@ io.on("connection", (socket) => {
   });
 
   registerPlayerHandlers(socket, io);
-  registerHostHandlers(socket);
+  registerHostHandlers(socket, io);
   registerQuizHandlers(socket);
 });
 

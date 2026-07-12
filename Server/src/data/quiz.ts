@@ -38,7 +38,7 @@ export const allQuizzes: Quiz[] = [
     questions: [
       {
         id: 1,
-        type: QuestionTypeValue.Text,
+        type: QuestionTypeValue.Multiple,
         question: "Nenne einen Planeten aus unserem Sonnensystem",
         possibleAnswers: [
           {
