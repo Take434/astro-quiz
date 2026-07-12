@@ -22,9 +22,23 @@ type Quiz = {
 };
 
 type Question = {
-  type: QuestionType;
-  question: string;
-  choices?: string[];
+  id: number;
+  image?: string;
+  type: QuestionTypeValue;
+  text: string;
+  options: Option[];
+  answers: number[];
 };
 
-type QuestionType = "single" | "multiple" | "order" | "text";
+type Option = {
+  id: number;
+  text: string;
+  image?: string;
+};
+
+enum QuestionTypeValue {
+  Multiple,
+  Order,
+  Text,
+  HigherLower,
+}

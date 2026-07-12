@@ -1,29 +1,15 @@
 import { hostGame } from "#/services/game-service";
+import { useQuizzes, type Quiz } from "#/services/quiz-service";
 import { useSocketSession } from "#/socket/SocketSessionProvider";
 import { HostStateValue, useHostState } from "#/stores/hostState";
-import { useState } from "react";
-
-type quiz = {
-  id: string;
-  title: string;
-  description: string;
-  cover: string;
-};
+import { useEffect, useState } from "react";
 
 export function HostCreateGame() {
   const [selectedQuiz, setSelectedQuiz] = useState<string>("");
   const updateHostState = useHostState().setHostState;
   const socketSession = useSocketSession();
 
-  const quizzs: quiz[] = [
-    {
-      id: "abc123",
-      title: "Astronomie SoSe 26",
-      description: "Ein Quiz zu den Inhalten des Kurses im Sommer Semester 26",
-      cover:
-        "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-    },
-  ];
+  const quizzes = useQuizzes(socketSession.socket);
 
   const startGame = () => {
     hostGame(socketSession.socket);
@@ -41,7 +27,7 @@ export function HostCreateGame() {
         </p>
         <p>Such dir eins der Quizzes von unten aus und leg los.</p>
         <div className="flex gap-5 mt-10 w-full flex-col">
-          {quizzs.map((x) => (
+          {quizzes?.map((x) => (
             <QuizPreview
               q={x}
               selected={x.id === selectedQuiz}
@@ -67,7 +53,7 @@ function QuizPreview({
   selected,
   setSelected,
 }: {
-  q: quiz;
+  q: Quiz;
   selected: boolean;
   setSelected: (a: string) => void;
 }) {

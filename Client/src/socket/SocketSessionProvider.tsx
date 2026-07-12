@@ -11,7 +11,6 @@ import { io, Socket } from "socket.io-client";
 
 const SessionContext = createContext<SocketSessionState | null>(null);
 export function SocketSessionProvider({ children }: { children: ReactNode }) {
-  // const [activeSocket, setActiveSocket] = useState<any | null>(null);
   const [socketSession, setSocketSession] = useState<SocketSessionState | null>(
     null,
   );

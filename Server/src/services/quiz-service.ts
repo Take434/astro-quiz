@@ -3,18 +3,18 @@ import path from "node:path";
 import fs from "fs";
 
 export function registerQuizHandlers(socket: Socket) {
-  socket.on("quiz:getAll", async () => {
+  socket.on("quiz:getAll", async (data, callback) => {
     const filePath = path.join(__dirname, "../", "data", "quiz.json");
-    console.log(filePath);
 
     // let content;
 
-    await fs.readFile(filePath, (err, data) => {
-      const jsonObject = JSON.parse(data.toString());
+    await fs.readFile(filePath, (err, json) => {
+      const jsonObject = JSON.parse(json.toString());
 
-      console.log(jsonObject);
-
-      socket.emit("quiz:getAll", jsonObject);
+      callback({
+        success: true,
+        quizzes: jsonObject,
+      });
     });
 
     // return JSON.parse(content);
