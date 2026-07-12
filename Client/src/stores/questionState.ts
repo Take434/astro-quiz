@@ -9,7 +9,7 @@ export enum QuestionType {
 
 export type Answer = {
   id: number;
-  text: string;
+  text?: string;
   image?: string;
 };
 
@@ -33,20 +33,39 @@ const example: Question = {
   type: QuestionType.MultipleChoice,
   possibleAnswers: [
     {
-      id: 1,
+      id: 11,
       text: "Nah mate never, dont even worry about it",
     },
     {
-      id: 2,
+      id: 12,
       text: "Well, aint that what they are there for?",
     },
     {
-      id: 3,
+      id: 13,
       text: "Nope, blowing it up tho...",
     },
     {
-      id: 4,
+      id: 14,
       text: "I know for a fact 9/11 was an inside job",
+    },
+    {
+      id: 1,
+      image:
+        "https://media.tenor.com/oBso-DbE4ZYAAAAM/bernd-das-brot-deutsch.gif",
+    },
+    {
+      id: 2,
+      image:
+        "https://media.tenor.com/M1scMNKh6nQAAAAM/nutricscore-nutri-score.gif",
+    },
+    {
+      id: 3,
+      image: "https://media.tenor.com/8in0iRRvNRoAAAAm/semel-kater.webp",
+    },
+    {
+      id: 4,
+      image:
+        "https://media.tenor.com/77ICN595wI0AAAAM/dinner-for-one-bernd-das-brot.gif",
     },
   ],
   correctAnswers: [4],
