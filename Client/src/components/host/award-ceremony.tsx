@@ -1,7 +1,7 @@
 import { continueGame } from "#/services/game-service";
 import { useSocketSession } from "#/socket/SocketSessionProvider";
 
-export function HostQuestionReveal() {
+export function HostAwardCeremony() {
   const socketSession = useSocketSession();
 
   const nextQuestion = () => {

@@ -1,9 +1,10 @@
 import { rootRoute } from "#/app";
+import { HostAwardCeremony } from "#/components/host/award-ceremony";
 import { HostCreateGame } from "#/components/host/create-game";
 import { HostJoinGame } from "#/components/host/join-game";
+import { HostLeaderBoard } from "#/components/host/leaderboard";
 import { HostQuestion } from "#/components/host/question";
-import { continueGame } from "#/services/game-service";
-import { useSocketSession } from "#/socket/SocketSessionProvider";
+import { HostQuestionReveal } from "#/components/host/question-reveal";
 import { HostStateValue, useHostState } from "#/stores/hostState";
 import { createRoute } from "@tanstack/react-router";
 
@@ -15,23 +16,15 @@ export const hostRoute = createRoute({
 
 function RouteComponent() {
   const hostState = useHostState().hostState;
-  const socketSession = useSocketSession();
-
-  const nextQuestion = () => {
-    continueGame(socketSession.socket);
-  };
 
   return (
     <>
       {hostState === HostStateValue.CreateGame && <HostCreateGame />}
       {hostState === HostStateValue.JoinGame && <HostJoinGame />}
       {hostState === HostStateValue.Question && <HostQuestion />}
-      {hostState === HostStateValue.QuestionReveal && "QuestionReveal..."}
-      {hostState === HostStateValue.Leaderboard && "Leaderboard..."}
-      {hostState === HostStateValue.AwardCeremony && "AwardCeremony..."}
-      <button className="btn btn-primary" onClick={nextQuestion}>
-        Weiter
-      </button>
+      {hostState === HostStateValue.QuestionReveal && <HostQuestionReveal />}
+      {hostState === HostStateValue.Leaderboard && <HostLeaderBoard />}
+      {hostState === HostStateValue.AwardCeremony && <HostAwardCeremony />}
     </>
   );
 }

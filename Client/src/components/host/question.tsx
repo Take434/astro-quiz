@@ -63,18 +63,14 @@ export function HostQuestion() {
         <span className="badge bg-accent text-accent-content text-lg rounded-none">
           {typeToBadge(question.type)}
         </span>
-        <h1 className="bg-primary text-primary-content text-2xl font-bold p-2">
+        <h1 className="bg-primary text-primary-content text-4xl font-bold p-2">
           {question?.question}
         </h1>
         <div>{typeToExplainer(question.type)}</div>
         <div className="bg-base-300 mt-5 p-5">
           <img src={question.image} className=" w-lg mx-auto" />
         </div>
-        <button
-          className="btn btn-primary ml-auto mt-5"
-          onClick={nextQuestion}
-          disabled={countdown > 0}
-        >
+        <button className="btn btn-primary ml-auto mt-5" onClick={nextQuestion}>
           Weiter
         </button>
       </div>

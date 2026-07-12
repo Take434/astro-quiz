@@ -17,7 +17,7 @@ export interface HostState {
 }
 
 export const useHostState = create<HostState>((set) => ({
-  hostState: HostStateValue.Question,
+  hostState: HostStateValue.CreateGame,
   setHostState: (state: HostStateValue) => set({ hostState: state }),
   setLeaderboard: (leaderboard: PlayerScores[]) =>
     set({ leaderboard: leaderboard }),
