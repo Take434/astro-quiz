@@ -29,8 +29,11 @@ export interface QuestionState {
 
 const example: Question = {
   id: 67,
-  question: "Would you steal a car?",
+  question:
+    "Welche Planten in unserem Sonnensytem bestehen vollständig aus Gas?",
   type: QuestionType.MultipleChoice,
+  image:
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/M101_hires_STScI-PRC2006-10a.jpg/1280px-M101_hires_STScI-PRC2006-10a.jpg",
   possibleAnswers: [
     {
       id: 11,
