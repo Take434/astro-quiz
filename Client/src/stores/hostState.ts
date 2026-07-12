@@ -11,10 +11,19 @@ export enum HostStateValue {
 
 export interface HostState {
   hostState: HostStateValue;
+  leaderboard?: PlayerScores[];
   setHostState: (state: HostStateValue) => void;
+  setLeaderboard: (leaderboard: PlayerScores[]) => void;
 }
 
 export const useHostState = create<HostState>((set) => ({
   hostState: HostStateValue.Question,
   setHostState: (state: HostStateValue) => set({ hostState: state }),
+  setLeaderboard: (leaderboard: PlayerScores[]) =>
+    set({ leaderboard: leaderboard }),
 }));
+
+export type PlayerScores = {
+  username: string;
+  score: number;
+};

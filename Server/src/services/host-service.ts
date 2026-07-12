@@ -17,11 +17,12 @@ const registerHostGame = (socket: Socket) =>
   socket.on("game:host", async (quizId: number) => {
     const id = await redisClient.incr("game:id");
     const sessionId = socket.request.session.id;
-    await redisGameStore.set<Game>(id, {
+    await redisGameStore.set(id, {
       host: sessionId,
       quizId: quizId,
       state: HostStateValue.JoinGame,
       questionStep: 0,
+      players: [],
     });
     socket.join(`game:${id}`);
 
@@ -50,7 +51,7 @@ const registerContinueGame = (socket: Socket, io: Server) =>
     }
 
     console.log("gameId:", gameId);
-    const game = await redisGameStore.get<Game>(gameId);
+    const game = await redisGameStore.get(gameId);
     console.log(game);
 
     if (!game || game.host != socket.request.session.id) {
@@ -68,7 +69,6 @@ const registerContinueGame = (socket: Socket, io: Server) =>
         game.state = HostStateValue.Question;
         question = quiz?.questions[game.questionStep];
         if (question) {
-          // callback({ success: true, question: question });
           socket.emit("host:state", {
             state: HostStateValue.Question,
             question: question,
@@ -87,12 +87,21 @@ const registerContinueGame = (socket: Socket, io: Server) =>
         break;
       case HostStateValue.QuestionReveal:
         game.state = HostStateValue.Leaderboard;
+        const result = game?.players.map((item) => ({
+          username: item.username,
+          score: item.score,
+        }));
+
+        console.log(result);
+
+        socket.emit("game:leaderboard", result);
         break;
       case HostStateValue.Leaderboard:
         if (quiz?.questions.length === game.questionStep) {
           game.state = HostStateValue.AwardCeremony;
         } else {
           game.state = HostStateValue.Question;
+          game.questionStep++;
           game.questionStep++;
         }
         break;
@@ -103,7 +112,7 @@ const registerContinueGame = (socket: Socket, io: Server) =>
 
     console.log("GAME:CONTINUED:" + gameId + ":" + game.state);
 
-    await redisGameStore.set<Game>(gameId, game);
+    await redisGameStore.set(gameId, game);
 
     socket.emit("host:state", {
       state: game.state,

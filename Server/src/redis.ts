@@ -1,5 +1,6 @@
 import { RedisStore } from "connect-redis";
 import { createClient, RedisClientType } from "redis";
+import { Game } from "./types/game.model";
 
 export const redisClient: RedisClientType = createClient({
   socket: {
@@ -26,7 +27,7 @@ export const redisSessionStore = new RedisStore({
 });
 
 export const redisGameStore = {
-  async get<T>(gameId: number): Promise<T | null> {
+  async get(gameId: number): Promise<Game | null> {
     const data = await redisClient.get(`game:${gameId}`);
 
     if (!data) {
@@ -36,7 +37,7 @@ export const redisGameStore = {
     return JSON.parse(data);
   },
 
-  async set<T>(gameId: number, game: T) {
+  async set(gameId: number, game: Game) {
     await redisClient.set(`game:${gameId}`, JSON.stringify(game), {
       expiration: { type: "EX", value: 60 * 60 * 2 }, // expire after 2 hours
     });

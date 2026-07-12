@@ -21,7 +21,7 @@ type Answer = {
   image?: string;
 };
 
-enum QuestionTypeValue {
+export enum QuestionTypeValue {
   Multiple,
   Order,
   Text,
