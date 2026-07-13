@@ -1,7 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { redisClient, redisGameStore } from "../redis";
 import {
-  Game,
   GameState,
   HostStateValue,
   Player,
@@ -9,8 +8,8 @@ import {
 } from "../types/game.model";
 import { getAllQuizzes } from "./quiz-service";
 import { Question } from "../data/quiz";
-import { time, timeStamp } from "node:console";
 import { GameResults } from "../types/game.model";
+import { sessionSockets } from "..";
 
 export function registerHostHandlers(socket: Socket, io: Server) {
   registerHostGame(socket);
@@ -98,28 +97,21 @@ const registerContinueGame = (socket: Socket, io: Server) =>
         if (quiz?.questions.length === game.questionStep) {
           game.state = HostStateValue.AwardCeremony;
 
-          const activePlayerIndex = game.players.findIndex(
-            (x) => x.id === socket.request.session.id,
-          );
-
-          console.log(activePlayerIndex);
-          console.log(game);
-          console.log(socket.request.session.id);
-
           game.players.sort((a, b) => b.score - a.score);
 
-          const gameResults: GameResults = {
-            maxScore: quiz.maxScore,
-            players: game.players.length,
-            placement: activePlayerIndex + 1,
-            score: game.players.at(activePlayerIndex)?.score ?? 0,
-          };
+          game.players.forEach((player, index) => {
+            const gameResults: GameResults = {
+              maxScore: quiz.maxScore,
+              players: game.players.length,
+              placement: index + 1,
+              score: player.score ?? 0,
+            };
 
-          console.log(gameResults);
-
-          io.to(`game:${gameId}`).emit("player:state", {
-            gameResults: gameResults,
-            state: PlayerStateValue.AwardCeremony,
+            const socketId = sessionSockets.get(player.id);
+            io.to(socketId).emit("player:state", {
+              gameResults: gameResults,
+              state: PlayerStateValue.AwardCeremony,
+            });
           });
         } else {
           game.state = HostStateValue.Question;

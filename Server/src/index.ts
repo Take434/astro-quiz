@@ -46,8 +46,18 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
+export const sessionSockets = new Map();
+
 io.on("connection", (socket) => {
   const session = socket.request.session;
+
+  sessionSockets.set(session.id, socket.id);
+
+  socket.on("disconnect", () => {
+    if (sessionSockets.get(session.id) === socket.id) {
+      sessionSockets.delete(session.id);
+    }
+  });
 
   const persistSession = async () => {
     if (!session) {
@@ -84,14 +94,6 @@ io.on("connection", (socket) => {
   };
 
   void persistSession();
-
-  socket.on("session:log", async () => {
-    console.log(session.gameId);
-  });
-
-  socket.on("console:clear", () => {
-    console.clear();
-  });
 
   registerPlayerHandlers(socket, io);
   registerHostHandlers(socket, io);
