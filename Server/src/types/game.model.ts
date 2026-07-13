@@ -39,3 +39,10 @@ export type GameState = {
   state: HostStateValue;
   questionStep: number;
 };
+
+export type GameResults = {
+  score: number;
+  maxScore: number;
+  placement: number;
+  players: number;
+};

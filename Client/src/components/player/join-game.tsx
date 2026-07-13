@@ -88,6 +88,7 @@ export function PlayerJoinGame() {
               <div className="grid grid-cols-5 grid-rows-5 hover:bg-transparent hover:cursor-default">
                 {iconOptions.map((x) => (
                   <div
+                    key={x}
                     className="hover:bg-base-content hover:cursor-pointer rounded flex"
                     onClick={() => setPlayerIcon(x)}
                   >

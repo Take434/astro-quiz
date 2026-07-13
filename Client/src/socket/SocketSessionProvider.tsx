@@ -26,7 +26,7 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
     setPlayers: updatePlayers,
     setTimer: updateTimer,
   } = useHostState();
-  const updatePlayerState = usePlayerState().setPlayerState;
+  const playerState = usePlayerState();
   const updateQuestionState = useQuestionState().setQuestionState;
 
   useEffect(() => {
@@ -60,10 +60,15 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
 
     socket.on("game:ended", () => {
       updateHostState(HostStateValue.CreateGame);
-      updatePlayerState(PlayerStateValue.JoinGame);
+      playerState.setPlayerState(PlayerStateValue.JoinGame);
     });
 
-    registerPlayerStateChange(socket, updateQuestionState, updatePlayerState);
+    registerPlayerStateChange(
+      socket,
+      updateQuestionState,
+      playerState.setPlayerState,
+      playerState.setPlayerAwardState,
+    );
     registerHostStateChange(
       socket,
       updateQuestionState,
