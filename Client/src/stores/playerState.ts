@@ -5,7 +5,6 @@ export enum PlayerStateValue {
   Question,
   Wait,
   AwardCeremony,
-  Debug,
 }
 
 export interface PlayerState {
@@ -14,6 +13,6 @@ export interface PlayerState {
 }
 
 export const usePlayerState = create<PlayerState>((set) => ({
-  playerState: PlayerStateValue.JoinGame,
+  playerState: PlayerStateValue.AwardCeremony,
   setPlayerState: (state: PlayerStateValue) => set({ playerState: state }),
 }));
