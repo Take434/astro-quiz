@@ -54,9 +54,7 @@ const registerContinueGame = (socket: Socket, io: Server) =>
       return;
     }
 
-    console.log("gameId:", gameId);
     const game = await redisGameStore.get(gameId);
-    console.log(game);
 
     if (!game || game.host != socket.request.session.id) {
       return;
@@ -98,6 +96,10 @@ const registerContinueGame = (socket: Socket, io: Server) =>
         game.questionStep++;
         if (quiz?.questions.length === game.questionStep) {
           game.state = HostStateValue.AwardCeremony;
+          io.to(`game:${gameId}`).emit("player:state", {
+            players: game.players.map((item) => item),
+            maxScore: quiz.maxScore,
+          });
         } else {
           game.state = HostStateValue.Question;
           game.timer = Date.now() + 60_000;
@@ -116,7 +118,9 @@ const registerContinueGame = (socket: Socket, io: Server) =>
         break;
       case HostStateValue.AwardCeremony:
         await redisGameStore.delete(gameId);
-        break;
+        console.log("GAME:DELETED:" + gameId);
+        io.to(`game:${gameId}`).emit("game:ended");
+        return;
     }
 
     console.log("GAME:CONTINUED:" + gameId + ":" + game.state);
@@ -136,6 +140,9 @@ const registerGameRejoin = (socket: Socket, io: Server) =>
     const gameId = socket.request.session.gameId;
     if (!gameId || !value) {
       socket.request.session.gameId = undefined;
+      await redisGameStore.delete(gameId!);
+      console.log("GAME:DELETED:" + gameId);
+      io.to(`game:${gameId}`).emit("game:ended");
       await socket.request.session.save();
     } else {
       socket.join(`game:${gameId}`);
