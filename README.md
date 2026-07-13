@@ -1,50 +1,5 @@
-Definition of Done
+## Astro Quiz
+This project was developed for the Astro Course at HSRW Kali during the Summer Semester 2026. It is a quiz app, not unlike the well known one starting with K :). Quizzes are hardcoded and currently limited to one Astro specific one.
 
-### Backend
-- read quizzes from json file
-- websocket connection to all players and host
-- validate answers from clients
-- update display leaderboard / display on host
-- update on what question  and what question type on client
-- rejoin clients to ongoing games
-- join clients to ongoing games
-### DB
-- active games
-	- what game
-	- on what question
-- active clients
-	- what name chosen
-	- In which game
-	- host or player
-	- score
-- delete active clients after amount of time
-### Client
-#### Host - desktop
-- create a game
-	- choose from presets based on json files
-- join game
-	- qr code to join
-	- joined players
-	- start button
-- question
-	- maybe pic depending on question
-	- active question
-	- timer
-	- finished players?
-	- stats on right and wrong answers?
-	- continue button?
-- leaderboard
-	- after each question?
-- award ceremony
-#### Player - mobile
-- join game
-	- choose name
-	- choose avatar?
-- question
-	- answer fields (depending on question)
-	- submit 
-- wait screen?
-- award ceremony
-	- score
-	- placement
-- rejoin screen
+### Starting
+Just Clone the repo and run `docker compose up`. Some variables in the docker compose should be modified to fit your usecase (VITE_BASE_URL, port mapping).

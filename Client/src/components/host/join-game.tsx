@@ -3,6 +3,8 @@ import { useSocketSession } from "#/socket/SocketSessionProvider";
 import { useHostState } from "#/stores/hostState";
 import QRCode from "react-qr-code";
 
+const baseUrl = import.meta.env.VITE_BASE_URL;
+
 export function HostJoinGame() {
   const socketSession = useSocketSession();
 
@@ -36,7 +38,7 @@ export function HostJoinGame() {
           </p>
           <div className="bg-white p-2 mt-5">
             <QRCode
-              value={`${socketSession.game?.id ?? "NOTHING HERE MATE"}`}
+              value={`${baseUrl}/play/${socketSession.game?.id ?? ""}`}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
             />
           </div>

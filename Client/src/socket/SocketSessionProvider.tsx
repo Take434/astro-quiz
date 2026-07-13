@@ -30,7 +30,8 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
   const updateQuestionState = useQuestionState().setQuestionState;
 
   useEffect(() => {
-    const socket = io("http://localhost:3000", {
+    const socket = io("/", {
+      path: "/api/socket.io",
       withCredentials: true,
       autoConnect: false,
     });

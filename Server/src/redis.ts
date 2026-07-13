@@ -2,9 +2,11 @@ import { RedisStore } from "connect-redis";
 import { createClient, RedisClientType } from "redis";
 import { Game } from "./types/game.model";
 
+const redisHost = process.env.REDIS_HOST ?? "127.0.0.1";
+
 export const redisClient: RedisClientType = createClient({
   socket: {
-    host: "127.0.0.1",
+    host: redisHost,
     port: 6379,
   },
 });

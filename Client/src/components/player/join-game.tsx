@@ -32,11 +32,11 @@ const iconOptions: string[] = [
   "🎭",
 ];
 
-export function PlayerJoinGame() {
+export function PlayerJoinGame({ gameId }: { gameId?: string }) {
   const updatePlayerState = usePlayerState().setPlayerState;
   const [playerIcon, setPlayerIcon] = useState<string>("👽");
   const [userName, setUserName] = useState<string>("");
-  const [gameCode, setGameCode] = useState<string>("");
+  const [gameCode, setGameCode] = useState<string>(gameId ?? "");
   const socketSession = useSocketSession();
 
   const startGame = () => {
@@ -58,6 +58,7 @@ export function PlayerJoinGame() {
             <input
               type="text"
               placeholder=""
+              value={gameId}
               onChange={(x) => setGameCode(x.target.value)}
             />
           </label>
