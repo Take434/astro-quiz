@@ -10,6 +10,7 @@ import {
 import { getAllQuizzes } from "./quiz-service";
 import { Question } from "../data/quiz";
 import { time, timeStamp } from "node:console";
+import { GameResults } from "../types/game.model";
 
 export function registerHostHandlers(socket: Socket, io: Server) {
   registerHostGame(socket);
@@ -96,10 +97,29 @@ const registerContinueGame = (socket: Socket, io: Server) =>
         game.questionStep++;
         if (quiz?.questions.length === game.questionStep) {
           game.state = HostStateValue.AwardCeremony;
-          io.to(`game:${gameId}`).emit("player:state", {
-            state: PlayerStateValue.AwardCeremony,
-            players: game.players.map((item) => item),
+
+          const activePlayerIndex = game.players.findIndex(
+            (x) => x.id === socket.request.session.id,
+          );
+
+          console.log(activePlayerIndex);
+          console.log(game);
+          console.log(socket.request.session.id);
+
+          game.players.sort((a, b) => b.score - a.score);
+
+          const gameResults: GameResults = {
             maxScore: quiz.maxScore,
+            players: game.players.length,
+            placement: activePlayerIndex + 1,
+            score: game.players.at(activePlayerIndex)?.score ?? 0,
+          };
+
+          console.log(gameResults);
+
+          io.to(`game:${gameId}`).emit("player:state", {
+            gameResults: gameResults,
+            state: PlayerStateValue.AwardCeremony,
           });
         } else {
           game.state = HostStateValue.Question;

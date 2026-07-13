@@ -3,11 +3,16 @@ import { PlayerStateValue, usePlayerState } from "#/stores/playerState";
 
 export function PlayerAwardCeremony() {
   const socketSession = useSocketSession();
-  const setPlayerState = usePlayerState().setPlayerState;
+  const playerState = usePlayerState();
+  const awardState = playerState.playerAwardState;
+
+  if (!awardState) {
+    return <div></div>;
+  }
 
   const leaveGame = () => {
     socketSession.socket.emit("player:rejoin", false);
-    setPlayerState(PlayerStateValue.JoinGame);
+    playerState.setPlayerState(PlayerStateValue.JoinGame);
   };
 
   return (
@@ -16,8 +21,12 @@ export function PlayerAwardCeremony() {
         <h1 className="bg-primary text-primary-content text-2xl font-bold p-2">
           Danke fürs Spielen!
         </h1>
-        <p className="pt-2 px-2">Deine Platzierung: 8 / 15</p>
-        <p className="px-2">Deine Punkte: 5 / 20</p>
+        <p className="pt-2 px-2">
+          Deine Platzierung: {awardState.placement} / {awardState.players}
+        </p>
+        <p className="px-2">
+          Deine Punkte: {awardState.score} / {awardState.maxScore}
+        </p>
         <button className="btn btn-primary mt-5 ml-auto" onClick={leaveGame}>
           Quiz verlassen
         </button>

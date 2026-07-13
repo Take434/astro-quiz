@@ -4,6 +4,7 @@ import { getAllQuizzes } from "./quiz-service";
 import { Question, QuestionTypeValue } from "../data/quiz";
 import {
   Game,
+  GameResults,
   HostStateValue,
   Player,
   PlayerStateValue,
@@ -170,10 +171,21 @@ function getPlayerState(game: Game, userId: string) {
       break;
     case HostStateValue.AwardCeremony:
       const quiz = getAllQuizzes().find((item) => item.id === game.quizId);
+
+      const activePlayerIndex = game.players.findIndex((x) => x.id === userId);
+
+      game.players.sort((a, b) => b.score - a.score);
+
+      const gameResults: GameResults = {
+        maxScore: quiz?.maxScore ?? 0,
+        players: game.players.length,
+        placement: activePlayerIndex + 1,
+        score: game.players.at(activePlayerIndex)?.score ?? 0,
+      };
+
       playerState = {
         state: PlayerStateValue.AwardCeremony,
-        players: game.players.map((item) => item),
-        maxScore: quiz?.maxScore,
+        gameResults: gameResults,
       };
       break;
     default:
@@ -188,6 +200,5 @@ function getPlayerState(game: Game, userId: string) {
 export type PlayerState = {
   state: PlayerStateValue;
   question?: Question;
-  maxScore?: number;
-  players?: Player[];
+  gameResults?: GameResults;
 };
