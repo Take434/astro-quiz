@@ -44,6 +44,14 @@ export function HostQuestionReveal() {
                 )}
               </div>
             ))}
+            {question.possibleAnswers.length === 0 && (
+              <div>
+                Die Antwort ist:{" "}
+                <span className="bg-secondary text-secondary-content">
+                  {question.correctAnswers[0] === -1 ? "Weniger" : "Mehr"}
+                </span>
+              </div>
+            )}
           </div>
           <button
             className="btn btn-primary ml-auto mt-5"
