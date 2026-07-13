@@ -175,6 +175,7 @@ function getPlayerState(game: Game, userId: string) {
         players: game.players.map((item) => item),
         maxScore: quiz?.maxScore,
       };
+      break;
     default:
       playerState = {
         state: PlayerStateValue.Wait,

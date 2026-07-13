@@ -13,6 +13,6 @@ export interface PlayerState {
 }
 
 export const usePlayerState = create<PlayerState>((set) => ({
-  playerState: PlayerStateValue.AwardCeremony,
+  playerState: PlayerStateValue.JoinGame,
   setPlayerState: (state: PlayerStateValue) => set({ playerState: state }),
 }));

@@ -97,6 +97,7 @@ const registerContinueGame = (socket: Socket, io: Server) =>
         if (quiz?.questions.length === game.questionStep) {
           game.state = HostStateValue.AwardCeremony;
           io.to(`game:${gameId}`).emit("player:state", {
+            state: PlayerStateValue.AwardCeremony,
             players: game.players.map((item) => item),
             maxScore: quiz.maxScore,
           });
