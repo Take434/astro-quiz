@@ -1,5 +1,5 @@
-import { useHostState, type HostStateValue } from "#/stores/hostState";
-import { usePlayerState } from "#/stores/playerState";
+import { HostStateValue, useHostState } from "#/stores/hostState";
+import { PlayerStateValue, usePlayerState } from "#/stores/playerState";
 import {
   createContext,
   useContext,
@@ -56,6 +56,11 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
 
     socket.on("game:host", (data: SocketSessionGameState) => {
       setSocketSession({ socket: socket, game: data });
+    });
+
+    socket.on("game:ended", () => {
+      updateHostState(HostStateValue.CreateGame);
+      updatePlayerState(PlayerStateValue.JoinGame);
     });
 
     registerPlayerStateChange(socket, updateQuestionState, updatePlayerState);

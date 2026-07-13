@@ -4,6 +4,7 @@ export type Quiz = {
   description: string;
   cover: string;
   questions: Question[];
+  maxScore: number;
 };
 
 export type Question = {
@@ -32,6 +33,7 @@ export const allQuizzes: Quiz[] = [
   {
     id: 1,
     title: "Astronomie SoSe 26",
+    maxScore: 10,
     description: "Ein Quiz zu den Inhalten des Kurses im Sommer Semester 26",
     cover:
       "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
@@ -105,6 +107,7 @@ export const allQuizzes: Quiz[] = [
   },
   {
     id: 2,
+    maxScore: 20,
     title: "Order Test",
     description: "Ein Quiz zu den Inhalten des Kurses im Sommer Semester 26",
     cover:
@@ -155,6 +158,7 @@ export const allQuizzes: Quiz[] = [
   },
   {
     id: 3,
+    maxScore: 10,
     title: "Higher Lower Test",
     description: "Ein Quiz zu den Inhalten des Kurses im Sommer Semester 26",
     cover:
