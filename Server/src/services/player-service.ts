@@ -187,6 +187,7 @@ function getPlayerState(game: Game, userId: string) {
         state: PlayerStateValue.AwardCeremony,
         gameResults: gameResults,
       };
+      break;
     default:
       playerState = {
         state: PlayerStateValue.Wait,
