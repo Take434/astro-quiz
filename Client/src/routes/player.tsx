@@ -1,5 +1,5 @@
 import { rootRoute } from "#/app";
-import { PlayerDebug } from "#/components/player/debug";
+import { PlayerAwardCeremony } from "#/components/player/award-ceremony";
 import { PlayerJoinGame } from "#/components/player/join-game";
 import { PlayerQuestion } from "#/components/player/question";
 import { PlayerWait } from "#/components/player/wait";
@@ -20,8 +20,9 @@ function RouteComponent() {
       {playerState === PlayerStateValue.JoinGame && <PlayerJoinGame />}
       {playerState === PlayerStateValue.Question && <PlayerQuestion />}
       {playerState === PlayerStateValue.Wait && <PlayerWait />}
-      {playerState === PlayerStateValue.Debug && <PlayerDebug />}
-      {playerState === PlayerStateValue.AwardCeremony && "AwardCeremony..."}
+      {playerState === PlayerStateValue.AwardCeremony && (
+        <PlayerAwardCeremony />
+      )}
     </>
   );
 }
