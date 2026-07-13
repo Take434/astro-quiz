@@ -8,12 +8,18 @@ import { createRoute, useParams } from "@tanstack/react-router";
 
 export const playerRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/play/$gameId",
+  path: "/play",
+  component: RouteComponent,
+});
+
+export const playerGameRoute = createRoute({
+  getParentRoute: () => playerRoute,
+  path: "/$gameId",
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { gameId } = useParams({ from: playerRoute.id });
+  const { gameId } = useParams({ from: playerGameRoute.id });
   const playerState = usePlayerState().playerState;
 
   return (

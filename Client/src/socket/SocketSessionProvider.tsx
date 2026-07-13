@@ -62,6 +62,7 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
     socket.on("game:ended", () => {
       updateHostState(HostStateValue.CreateGame);
       playerState.setPlayerState(PlayerStateValue.JoinGame);
+      updatePlayers([]);
     });
 
     registerPlayerStateChange(

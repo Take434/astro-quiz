@@ -58,7 +58,7 @@ export function PlayerJoinGame({ gameId }: { gameId?: string }) {
             <input
               type="text"
               placeholder=""
-              value={gameId}
+              defaultValue={gameId}
               onChange={(x) => setGameCode(x.target.value)}
             />
           </label>

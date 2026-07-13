@@ -34,8 +34,8 @@ services:
         - VITE_BASE_URL=astro-quiz.germanywestcentral.cloudapp.azure.com
     restart: always
     ports:
-      - 8080:80
-      - 4444:443
+      - 80:80
+      - 443:443
     networks:
       - frontend
 

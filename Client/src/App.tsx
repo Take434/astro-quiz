@@ -5,7 +5,7 @@ import {
   Outlet,
   RouterProvider,
 } from "@tanstack/react-router";
-import { playerRoute } from "./routes/player";
+import { playerGameRoute, playerRoute } from "./routes/player";
 import { hostRoute } from "./routes/host";
 import { SocketSessionProvider } from "./socket/SocketSessionProvider";
 import { Home } from "./home";
@@ -24,7 +24,12 @@ const homeRoute = createRoute({
   component: Home,
 });
 
-const routeTree = rootRoute.addChildren([homeRoute, playerRoute, hostRoute]);
+const routeTree = rootRoute.addChildren([
+  homeRoute,
+  playerRoute,
+  hostRoute,
+  playerGameRoute,
+]);
 
 export const router = createRouter({
   routeTree,
