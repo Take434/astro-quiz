@@ -95,12 +95,12 @@ const registerContinueGame = (socket: Socket, io: Server) =>
         game.state = HostStateValue.Leaderboard;
         break;
       case HostStateValue.Leaderboard:
+        game.questionStep++;
         if (quiz?.questions.length === game.questionStep) {
           game.state = HostStateValue.AwardCeremony;
         } else {
           game.state = HostStateValue.Question;
           game.timer = Date.now() + 60_000;
-          game.questionStep++;
           question = quiz?.questions[game.questionStep];
           if (question) {
             socket.emit("host:state", {

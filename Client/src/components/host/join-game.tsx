@@ -15,7 +15,6 @@ export function HostJoinGame() {
   return (
     <div className="p-8 flex h-screen">
       <div className="m-auto flex gap-5">
-        {socketSession.game?.id}
         <ul className="list bg-base-300 rounded-box shadow-md w-75">
           {players.map((x) => (
             <li className="list-row p-2">
@@ -28,6 +27,13 @@ export function HostJoinGame() {
           <h1 className="text-4xl font-bold text-primary-content bg-primary p-1">
             Auf Spieler Warten
           </h1>
+          <p>Scanne den QR Code oder tritt mit der Lobby Id bei</p>
+          <p className="font-bold text-xl">
+            Lobby Id:{" "}
+            <span className="bg-secondary text-secondary-content">
+              {socketSession.game?.id ?? 1}
+            </span>
+          </p>
           <div className="bg-white p-2 mt-5">
             <QRCode
               value={`${socketSession.game?.id ?? "NOTHING HERE MATE"}`}

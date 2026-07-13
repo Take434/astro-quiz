@@ -9,6 +9,7 @@ export function HostAwardCeremony() {
   };
   return (
     <div>
+      Award Ceremony
       <button className="btn btn-primary" onClick={nextQuestion}>
         Weiter
       </button>

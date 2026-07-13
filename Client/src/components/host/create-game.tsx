@@ -2,18 +2,30 @@ import { hostGame } from "#/services/game-service";
 import { useQuizzes, type Quiz } from "#/services/quiz-service";
 import { useSocketSession } from "#/socket/SocketSessionProvider";
 import { HostStateValue, useHostState } from "#/stores/hostState";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export function HostCreateGame() {
-  const [selectedQuiz, setSelectedQuiz] = useState<number>(0);
+  const [selectedQuiz, setSelectedQuiz] = useState<number | null>(null);
   const updateHostState = useHostState().setHostState;
   const socketSession = useSocketSession();
 
   const quizzes = useQuizzes(socketSession.socket);
 
   const startGame = () => {
+    if (!selectedQuiz) {
+      return;
+    }
+
     hostGame(socketSession.socket, selectedQuiz);
     updateHostState(HostStateValue.JoinGame);
+  };
+
+  const clickedAnswer = (x: number) => {
+    if (selectedQuiz === x) {
+      setSelectedQuiz(null);
+    } else {
+      setSelectedQuiz(x);
+    }
   };
 
   return (
@@ -26,13 +38,13 @@ export function HostCreateGame() {
           Erstell eine Spiel dem andere Spieler beitreten können.
         </p>
         <p>Such dir eins der Quizzes von unten aus und leg los.</p>
-        <div className="flex gap-5 mt-10 w-full flex-col">
+        <div className="flex gap-5 mt-10 w-full flex-wrap max-w-4xl">
           {quizzes?.map((x) => (
             <QuizPreview
               key={x.id}
               q={x}
               selected={x.id === selectedQuiz}
-              setSelected={setSelectedQuiz}
+              setSelected={clickedAnswer}
             />
           ))}
         </div>
