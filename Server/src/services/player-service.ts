@@ -152,8 +152,6 @@ function getPlayerState(game: Game, userId: string) {
       };
       break;
     case HostStateValue.Question:
-      console.log(game.players.find((item) => item.id === userId)?.answerCount);
-      console.log(game.questionStep);
       if (
         game.players.find((item) => item.id === userId)?.answerCount !==
         game.questionStep
@@ -170,6 +168,13 @@ function getPlayerState(game: Game, userId: string) {
         question: question,
       };
       break;
+    case HostStateValue.AwardCeremony:
+      const quiz = getAllQuizzes().find((item) => item.id === game.quizId);
+      playerState = {
+        state: PlayerStateValue.AwardCeremony,
+        players: game.players.map((item) => item),
+        maxScore: quiz?.maxScore,
+      };
     default:
       playerState = {
         state: PlayerStateValue.Wait,
@@ -182,4 +187,6 @@ function getPlayerState(game: Game, userId: string) {
 export type PlayerState = {
   state: PlayerStateValue;
   question?: Question;
+  maxScore?: number;
+  players?: Player[];
 };
