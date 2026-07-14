@@ -155,6 +155,7 @@ const registerGameRejoin = (socket: Socket, io: Server) =>
       socket.request.session.gameId = undefined;
       await redisGameStore.delete(gameId!);
       console.log("GAME:DELETED:" + gameId);
+      io.to(`game:${gameId}`).emit("error", "Der Host hat das Spiel beendet");
       io.to(`game:${gameId}`).emit("game:ended");
       await socket.request.session.save();
     } else {

@@ -32,10 +32,10 @@ export function HostCreateGame() {
     <div className="p-8 flex h-screen">
       <div className="m-auto">
         <h1 className="text-4xl font-bold text-primary-content bg-primary p-1">
-          Erstell ein Spiel
+          Erstelle ein Spiel
         </h1>
         <p className="mt-1">
-          Erstell eine Spiel dem andere Spieler beitreten können.
+          Erstelle eine Spiel dem andere Spieler beitreten können.
         </p>
         <p>Such dir eins der Quizzes von unten aus und leg los.</p>
         <div className="flex gap-5 mt-10 w-full flex-wrap max-w-4xl">

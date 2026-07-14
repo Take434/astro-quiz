@@ -38,7 +38,7 @@ export function HostJoinGame() {
           </p>
           <div className="bg-white p-2 mt-5">
             <QRCode
-              value={`${baseUrl}/play/${socketSession.game?.id ?? ""}`}
+              value={`${baseUrl}/play?gameId=${socketSession.game?.id ?? ""}`}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
             />
           </div>

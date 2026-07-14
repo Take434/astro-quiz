@@ -21,6 +21,26 @@ const registerGameJoin = (socket: Socket, io: Server) =>
     const game = await redisGameStore.get(data.gameId);
 
     if (game) {
+      if (!data.gameId || !data.username) {
+        socket.emit("error", "Gib einen Namen an!");
+        return;
+      }
+
+      let exists = false;
+      game.players.forEach((player) => {
+        if (player.icon === data.icon && player.username === data.username) {
+          exists = true;
+        }
+      });
+
+      if (exists) {
+        socket.emit(
+          "error",
+          "Die Kombination aus Icon und Name existiert beretis!",
+        );
+        return;
+      }
+
       const player: Player = {
         id: socket.request.session.id,
         answerCount: 0,
@@ -35,6 +55,10 @@ const registerGameJoin = (socket: Socket, io: Server) =>
         ...game,
       });
 
+      socket.emit("player:state", {
+        state: PlayerStateValue.Wait,
+      });
+
       socket.join(`game:${data.gameId}`);
 
       io.to(`game:${data.gameId}`).emit("game:players", game.players);
@@ -42,6 +66,8 @@ const registerGameJoin = (socket: Socket, io: Server) =>
       socket.request.session.gameId = data.gameId;
       await socket.request.session.save();
       console.log(game);
+    } else {
+      socket.emit("error", "Das Spiel konnte nicht gefunden werden!");
     }
   });
 

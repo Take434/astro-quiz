@@ -4,28 +4,35 @@ import { PlayerJoinGame } from "#/components/player/join-game";
 import { PlayerQuestion } from "#/components/player/question";
 import { PlayerWait } from "#/components/player/wait";
 import { PlayerStateValue, usePlayerState } from "#/stores/playerState";
-import { createRoute, useParams } from "@tanstack/react-router";
+import { createRoute, useNavigate, useSearch } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 export const playerRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/play",
-  component: RouteComponent,
-});
-
-export const playerGameRoute = createRoute({
-  getParentRoute: () => playerRoute,
-  path: "/$gameId",
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      gameId: search.gameId ? search.gameId : undefined,
+    };
+  },
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { gameId } = useParams({ from: playerGameRoute.id });
+  const { gameId } = useSearch({ from: playerRoute.id });
+  const navigate = useNavigate();
   const playerState = usePlayerState().playerState;
+
+  useEffect(() => {
+    if (gameId) {
+      navigate({ to: "/play", search: {} });
+    }
+  }, [gameId, navigate]);
 
   return (
     <>
       {playerState === PlayerStateValue.JoinGame && (
-        <PlayerJoinGame gameId={gameId} />
+        <PlayerJoinGame gameId={gameId ?? ""} />
       )}
       {playerState === PlayerStateValue.Question && <PlayerQuestion />}
       {playerState === PlayerStateValue.Wait && <PlayerWait />}

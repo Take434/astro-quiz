@@ -5,10 +5,11 @@ import {
   Outlet,
   RouterProvider,
 } from "@tanstack/react-router";
-import { playerGameRoute, playerRoute } from "./routes/player";
+import { playerRoute } from "./routes/player";
 import { hostRoute } from "./routes/host";
 import { SocketSessionProvider } from "./socket/SocketSessionProvider";
 import { Home } from "./home";
+import { ToastContainer } from "react-toastify";
 
 export const rootRoute = createRootRoute({
   component: () => (
@@ -24,12 +25,7 @@ const homeRoute = createRoute({
   component: Home,
 });
 
-const routeTree = rootRoute.addChildren([
-  homeRoute,
-  playerRoute,
-  hostRoute,
-  playerGameRoute,
-]);
+const routeTree = rootRoute.addChildren([homeRoute, playerRoute, hostRoute]);
 
 export const router = createRouter({
   routeTree,
@@ -39,6 +35,7 @@ function InnerApp() {
   return (
     <SocketSessionProvider>
       <RouterProvider router={router} />
+      <ToastContainer />
     </SocketSessionProvider>
   );
 }

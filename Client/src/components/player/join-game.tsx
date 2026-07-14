@@ -1,6 +1,5 @@
 import { joinGame } from "#/services/game-service";
 import { useSocketSession } from "#/socket/SocketSessionProvider";
-import { PlayerStateValue, usePlayerState } from "#/stores/playerState";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
@@ -32,16 +31,14 @@ const iconOptions: string[] = [
   "🎭",
 ];
 
-export function PlayerJoinGame({ gameId }: { gameId?: string }) {
-  const updatePlayerState = usePlayerState().setPlayerState;
+export function PlayerJoinGame({ gameId }: { gameId: string }) {
   const [playerIcon, setPlayerIcon] = useState<string>("👽");
   const [userName, setUserName] = useState<string>("");
-  const [gameCode, setGameCode] = useState<string>(gameId ?? "");
+  const [gameCode, setGameCode] = useState<string>(gameId);
   const socketSession = useSocketSession();
 
   const startGame = () => {
     joinGame(socketSession.socket, gameCode, userName, playerIcon);
-    updatePlayerState(PlayerStateValue.Wait);
   };
 
   return (
@@ -51,7 +48,7 @@ export function PlayerJoinGame({ gameId }: { gameId?: string }) {
           Einem Spiel Beitreten
         </h1>
         <p className="mt-1">Tritt einem Quiz mit dem Code bei.</p>
-        <p>Und such dir einen lustigen Smily / Namen aus :)</p>
+        <p>Und such dir einen lustigen Smiley / Namen aus :)</p>
         <div className="mt-5">
           <label className="input w-full">
             <span className="label">Code</span>

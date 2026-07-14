@@ -14,6 +14,7 @@ import {
   registerHostStateChange,
   registerPlayers,
 } from "./registerHostHandler";
+import { toast } from "react-toastify";
 
 const SessionContext = createContext<SocketSessionState | null>(null);
 export function SocketSessionProvider({ children }: { children: ReactNode }) {
@@ -39,6 +40,10 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
     setSocketSession({ ...socketSession, socket: socket });
 
     socket.on("connect", () => {});
+
+    socket.on("error", (message: string) => {
+      toast.warn(message);
+    });
 
     socket.on("player:rejoin", (data: SocketSessionGameState) => {
       const url = data.isHost ? "host:rejoin" : "player:rejoin";
