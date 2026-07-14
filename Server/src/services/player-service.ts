@@ -163,7 +163,13 @@ function calculateScore(question: Question, answerIds: number[], text: string) {
       });
       return score;
     case QuestionTypeValue.FreeText:
-      // TODO
+      if (
+        question.possibleAnswers
+          .map((item) => item.text.toLowerCase())
+          .includes(text.toLowerCase())
+      ) {
+        return 2;
+      }
       return 0;
     default:
       return 0;

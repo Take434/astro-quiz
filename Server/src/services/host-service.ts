@@ -7,7 +7,7 @@ import {
   PlayerStateValue,
 } from "../types/game.model";
 import { getAllQuizzes } from "./quiz-service";
-import { Question } from "../data/quiz";
+import { Answer, Question } from "../data/quiz";
 import { GameResults } from "../types/game.model";
 import { sessionSockets } from "..";
 
@@ -94,6 +94,10 @@ const registerContinueGame = (socket: Socket, io: Server) =>
         break;
       case HostStateValue.Leaderboard:
         game.questionStep++;
+        game.players = game.players.map((item) => ({
+          ...item,
+          answerCount: game.questionStep,
+        }));
         if (quiz?.questions.length === game.questionStep) {
           game.state = HostStateValue.AwardCeremony;
 
@@ -117,6 +121,11 @@ const registerContinueGame = (socket: Socket, io: Server) =>
           game.state = HostStateValue.Question;
           game.timer = Date.now() + 60_000;
           question = quiz?.questions[game.questionStep];
+
+          if (question?.possibleAnswers) {
+            question.possibleAnswers = shuffle(question.possibleAnswers);
+          }
+
           if (question) {
             socket.emit("host:state", {
               state: HostStateValue.Question,
@@ -185,3 +194,12 @@ export type HostState = {
   players: Player[];
   timer?: number;
 };
+
+function shuffle(array: Answer[]): Answer[] {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
