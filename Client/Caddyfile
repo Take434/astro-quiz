@@ -1,4 +1,4 @@
-:80 {
+astro-quiz.germanywestcentral.cloudapp.azure.com, astro-quiz.t-herr.com {
   redir /api /api/
 
   handle_path /api/* {
