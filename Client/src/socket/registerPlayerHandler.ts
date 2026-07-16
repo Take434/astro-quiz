@@ -26,6 +26,7 @@ export const registerPlayerStateChange = (
       question?: Question;
       gameResults?: GameResults;
     }) => {
+      console.log(question);
       updatePlayerState(state);
 
       if (state === PlayerStateValue.Question && question) {

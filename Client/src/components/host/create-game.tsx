@@ -1,13 +1,16 @@
 import { hostGame } from "#/services/game-service";
 import { useQuizzes, type Quiz } from "#/services/quiz-service";
+import { registerHostStateChange } from "#/socket/registerHostHandler";
 import { useSocketSession } from "#/socket/SocketSessionProvider";
-import { HostStateValue, useHostState } from "#/stores/hostState";
+import { useHostState } from "#/stores/hostState";
+import { useQuestionState } from "#/stores/questionState";
 import { useState } from "react";
 
 export function HostCreateGame() {
   const [selectedQuiz, setSelectedQuiz] = useState<number | null>(null);
-  const updateHostState = useHostState().setHostState;
   const socketSession = useSocketSession();
+  const questionState = useQuestionState();
+  const hostState = useHostState();
 
   const quizzes = useQuizzes(socketSession.socket);
 
@@ -15,9 +18,8 @@ export function HostCreateGame() {
     if (!selectedQuiz) {
       return;
     }
-
+    registerHostStateChange(socketSession.socket, questionState, hostState);
     hostGame(socketSession.socket, selectedQuiz);
-    updateHostState(HostStateValue.JoinGame);
   };
 
   const clickedAnswer = (x: number) => {

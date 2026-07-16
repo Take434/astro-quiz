@@ -77,7 +77,7 @@ io.on("connection", (socket) => {
           state: game.state,
           questionStep: game.questionStep,
         };
-        socket.emit("player:rejoin", gameState);
+        socket.emit("game:rejoin", gameState);
       }
     }
 

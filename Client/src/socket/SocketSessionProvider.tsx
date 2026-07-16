@@ -1,5 +1,5 @@
-import { HostStateValue, useHostState } from "#/stores/hostState";
-import { PlayerStateValue, usePlayerState } from "#/stores/playerState";
+import { useHostState } from "#/stores/hostState";
+import { usePlayerState } from "#/stores/playerState";
 import {
   createContext,
   useContext,
@@ -9,12 +9,7 @@ import {
 } from "react";
 import { io, Socket } from "socket.io-client";
 import { useQuestionState } from "#/stores/questionState";
-import { registerPlayerStateChange } from "./registerPlayerHandler";
-import {
-  registerHostStateChange,
-  registerPlayers,
-} from "./registerHostHandler";
-import { toast } from "react-toastify";
+import { registerDefaultHandler } from "./registerDefaultHandler";
 
 const SessionContext = createContext<SocketSessionState | null>(null);
 export function SocketSessionProvider({ children }: { children: ReactNode }) {
@@ -22,13 +17,9 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
     null,
   );
 
-  const {
-    setHostState: updateHostState,
-    setPlayers: updatePlayers,
-    setTimer: updateTimer,
-  } = useHostState();
+  const hostState = useHostState();
   const playerState = usePlayerState();
-  const updateQuestionState = useQuestionState().setQuestionState;
+  const questionState = useQuestionState();
 
   useEffect(() => {
     const socket = io("/", {
@@ -36,57 +27,9 @@ export function SocketSessionProvider({ children }: { children: ReactNode }) {
       withCredentials: true,
       autoConnect: false,
     });
-
-    setSocketSession({ ...socketSession, socket: socket });
-
-    socket.on("connect", () => {});
-
-    socket.on("error", (message: string) => {
-      toast.warn(message);
-    });
-
-    socket.on("player:rejoin", (data: SocketSessionGameState) => {
-      const url = data.isHost ? "host:rejoin" : "player:rejoin";
-      if (
-        confirm(
-          "Du bist bereits in einem Spiel, möchtest du beitreten? " + data.id,
-        )
-      ) {
-        socket.emit(url, true);
-      } else {
-        socket.emit(url, false);
-      }
-    });
-
-    socket.on("disconnect", () => {});
-
-    socket.on("game:host", (data: SocketSessionGameState) => {
-      setSocketSession({ socket: socket, game: data });
-    });
-
-    socket.on("game:ended", () => {
-      updateHostState(HostStateValue.CreateGame);
-      playerState.setPlayerState(PlayerStateValue.JoinGame);
-      updatePlayers([]);
-    });
-
-    registerPlayerStateChange(
-      socket,
-      updateQuestionState,
-      playerState.setPlayerState,
-      playerState.setPlayerAwardState,
-    );
-    registerHostStateChange(
-      socket,
-      updateQuestionState,
-      updateHostState,
-      updatePlayers,
-      updateTimer,
-    );
-    registerPlayers(socket, updatePlayers);
-
+    setSocketSession({ socket });
+    registerDefaultHandler(socket, questionState, hostState, playerState);
     socket.connect();
-
     return () => {
       socket.disconnect();
     };
@@ -111,11 +54,4 @@ export function useSocketSession() {
 
 type SocketSessionState = {
   socket: Socket;
-  game?: SocketSessionGameState;
-};
-
-type SocketSessionGameState = {
-  id: number;
-  isHost: boolean;
-  state: HostStateValue;
 };

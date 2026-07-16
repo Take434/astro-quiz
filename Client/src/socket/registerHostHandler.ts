@@ -1,13 +1,15 @@
-import { HostStateValue, type Player } from "#/stores/hostState";
-import type { Question } from "#/stores/questionState";
+import {
+  HostStateValue,
+  type HostState,
+  type Player,
+} from "#/stores/hostState";
+import type { Question, QuestionState } from "#/stores/questionState";
 import type { Socket } from "socket.io-client";
 
 export const registerHostStateChange = (
   socket: Socket,
-  updateQuestionState: (state: Question) => void,
-  updateHostState: (state: HostStateValue) => void,
-  updatePlayerState: (state: Player[]) => void,
-  updateTimer: (timer: number) => void,
+  questionState: QuestionState,
+  hostState: HostState,
 ) =>
   socket.on(
     "host:state",
@@ -16,26 +18,22 @@ export const registerHostStateChange = (
       question,
       players,
       timer,
+      gameId,
     }: {
       state: HostStateValue;
       question?: Question;
       players: Player[];
       timer: number;
+      gameId: number;
     }) => {
-      updateHostState(state);
-      updatePlayerState(players);
-      updateTimer(timer);
+      console.log(question);
+      hostState.setHostState(state);
+      hostState.setPlayers(players);
+      hostState.setTimer(timer);
+      hostState.setGameId(gameId);
 
       if (question) {
-        updateQuestionState(question);
+        questionState.setQuestionState(question);
       }
     },
   );
-
-export const registerPlayers = (
-  socket: Socket,
-  updatePlayers: (players: Player[]) => void,
-) =>
-  socket.on("game:players", (players: Player[]) => {
-    updatePlayers(players);
-  });

@@ -19,30 +19,26 @@ export function registerHostHandlers(socket: Socket, io: Server) {
 
 const registerHostGame = (socket: Socket) =>
   socket.on("game:host", async (quizId: number) => {
-    const id = await redisClient.incr("game:id");
+    const gameId = await redisClient.incr("game:id");
     const sessionId = socket.request.session.id;
-    await redisGameStore.set(id, {
+    await redisGameStore.set(gameId, {
       host: sessionId,
       quizId: quizId,
       state: HostStateValue.JoinGame,
       questionStep: 0,
       players: [],
     });
-    socket.join(`game:${id}`);
+    socket.join(`game:${gameId}`);
 
-    const game: GameState = {
-      id: id,
-      quizId: quizId,
-      isHost: true,
+    console.log("GAME:HOSTED:" + gameId);
+
+    socket.emit("host:state", {
+      gameId: gameId,
+      players: [],
       state: HostStateValue.JoinGame,
-      questionStep: 0,
-    };
+    } satisfies HostState);
 
-    console.log("GAME:HOSTED:" + id);
-
-    socket.emit("game:host", game);
-
-    socket.request.session.gameId = id;
+    socket.request.session.gameId = gameId;
     await socket.request.session.save();
   });
 
@@ -78,15 +74,17 @@ const registerContinueGame = (socket: Socket, io: Server) =>
           });
           io.to(`game:${gameId}`).emit("player:state", {
             state: PlayerStateValue.Question,
-            question: question,
+            question: { ...question, correctAnswers: [] } satisfies Question,
           });
         }
         break;
       case HostStateValue.Question:
         game.state = HostStateValue.QuestionReveal;
         game.timer = undefined;
+        question = quiz?.questions[game.questionStep];
         io.to(`game:${gameId}`).emit("player:state", {
           state: PlayerStateValue.Wait,
+          question: question,
         });
         break;
       case HostStateValue.QuestionReveal:
@@ -179,6 +177,7 @@ const registerGameRejoin = (socket: Socket, io: Server) =>
         : undefined;
 
       const state: HostState = {
+        gameId: gameId,
         state: game.state,
         question: question,
         players: game.players.sort((a, b) => a.score - b.score),
@@ -189,6 +188,7 @@ const registerGameRejoin = (socket: Socket, io: Server) =>
   });
 
 export type HostState = {
+  gameId: number;
   state: HostStateValue;
   question?: Question;
   players: Player[];

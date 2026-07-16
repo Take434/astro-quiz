@@ -19,7 +19,7 @@ export type Question = {
   type: QuestionType;
   image?: string;
   possibleAnswers: Answer[];
-  correctAnswers: number[];
+  correctAnswers?: number[];
 };
 
 export interface QuestionState {

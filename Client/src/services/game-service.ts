@@ -14,10 +14,6 @@ export const joinGame = (
   socket.emit("game:join", { gameId: gameId, username: username, icon: icon });
 };
 
-export const rejoinGame = (socket: Socket) => {
-  socket.emit("game:rejoin", true);
-};
-
 /**updated game state according to backend state machine */
 export const continueGame = (socket: Socket) => {
   socket.emit("game:continue");

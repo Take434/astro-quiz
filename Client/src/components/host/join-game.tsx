@@ -8,7 +8,7 @@ const baseUrl = import.meta.env.VITE_BASE_URL;
 export function HostJoinGame() {
   const socketSession = useSocketSession();
 
-  const players = useHostState().players;
+  const { players, gameId } = useHostState();
 
   const startGame = () => {
     continueGame(socketSession.socket);
@@ -33,12 +33,12 @@ export function HostJoinGame() {
           <p className="font-bold text-xl">
             Lobby Id:{" "}
             <span className="bg-secondary text-secondary-content">
-              {socketSession.game?.id ?? 1}
+              {gameId ?? 1}
             </span>
           </p>
           <div className="bg-white p-2 mt-5">
             <QRCode
-              value={`${baseUrl}/play?gameId=${socketSession.game?.id ?? ""}`}
+              value={`${baseUrl}/play?gameId=${gameId ?? ""}`}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
             />
           </div>

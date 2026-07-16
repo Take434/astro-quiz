@@ -30,14 +30,14 @@ export function HostQuestionReveal() {
               <div key={a.id} className={`${a.text ? "w-full" : ""}`}>
                 {a.text && (
                   <div
-                    className={`p-2 border-2 rounded h-fit ${question.correctAnswers.includes(a.id) ? "border-secondary" : "border-base-content"}`}
+                    className={`p-2 border-2 rounded h-fit ${question.correctAnswers?.includes(a.id) ? "border-secondary" : "border-base-content"}`}
                   >
                     {a.text}
                   </div>
                 )}
                 {a.image && (
                   <div
-                    className={`p-2 border-2 rounded h-fit ${question.correctAnswers.includes(a.id) ? "border-secondary" : ""}`}
+                    className={`p-2 border-2 rounded h-fit ${question.correctAnswers?.includes(a.id) ? "border-secondary" : ""}`}
                   >
                     <img className="w-44 h-44" src={a.image} />
                   </div>
@@ -48,7 +48,11 @@ export function HostQuestionReveal() {
               <div>
                 Die Antwort ist:{" "}
                 <span className="bg-secondary text-secondary-content">
-                  {question.correctAnswers[0] === -1 ? "Weniger" : "Mehr"}
+                  {question.correctAnswers
+                    ? question.correctAnswers[0] === -1
+                      ? "Weniger"
+                      : "Mehr"
+                    : "n/a"}
                 </span>
               </div>
             )}

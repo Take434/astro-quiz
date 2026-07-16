@@ -1,5 +1,8 @@
 import { joinGame } from "#/services/game-service";
+import { registerPlayerStateChange } from "#/socket/registerPlayerHandler";
 import { useSocketSession } from "#/socket/SocketSessionProvider";
+import { usePlayerState } from "#/stores/playerState";
+import { useQuestionState } from "#/stores/questionState";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
@@ -36,8 +39,16 @@ export function PlayerJoinGame({ gameId }: { gameId: string }) {
   const [userName, setUserName] = useState<string>("");
   const [gameCode, setGameCode] = useState<string>(gameId);
   const socketSession = useSocketSession();
+  const updateQuestionState = useQuestionState().setQuestionState;
+  const playerState = usePlayerState();
 
   const startGame = () => {
+    registerPlayerStateChange(
+      socketSession.socket,
+      updateQuestionState,
+      playerState.setPlayerState,
+      playerState.setPlayerAwardState,
+    );
     joinGame(socketSession.socket, gameCode, userName, playerIcon);
   };
 
