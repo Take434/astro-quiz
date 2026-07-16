@@ -34,7 +34,17 @@ export function HostQuestion() {
   const question = useQuestionState().questionState;
   const socketSession = useSocketSession();
 
-  const { timer, hostState } = useHostState();
+  const { timer, hostState, players, questionNr } = useHostState();
+  const [submittedString, setSubmittedString] = useState("");
+
+  useEffect(() => {
+    var submittedPlayers = players?.filter(
+      (p) => p.answerCount === (questionNr ?? 0) + 1,
+    );
+    setSubmittedString(
+      `${submittedPlayers?.length} von ${players?.length} haben abgestimmt`,
+    );
+  }, [questionNr, players]);
 
   const [countdown, setCountdown] = useState<number>(timer ?? 60);
 
@@ -83,9 +93,12 @@ export function HostQuestion() {
         <div className="bg-base-300 mt-5 p-5">
           <img src={question.image} className=" w-lg mx-auto" />
         </div>
-        <button className="btn btn-primary ml-auto mt-5" onClick={nextQuestion}>
-          Weiter
-        </button>
+        <div className="flex mt-5">
+          <div>{submittedString}</div>
+          <button className="btn btn-primary ml-auto" onClick={nextQuestion}>
+            Weiter
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -10,6 +10,9 @@ export type Game = {
 export type Player = {
   id: string;
   score: number;
+  lastScore?: number;
+  lastAnswerIds?: number[];
+  lastText?: string;
   answerCount: number;
   username: string;
   icon: string;
@@ -29,7 +32,7 @@ export enum PlayerStateValue {
   Question,
   Wait,
   AwardCeremony,
-  Debug,
+  QuestionReveal,
 }
 
 export type GameState = {

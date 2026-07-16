@@ -6,6 +6,7 @@ export enum PlayerStateValue {
   Question,
   Wait,
   AwardCeremony,
+  QuestionReveal,
 }
 
 export interface PlayerState {

@@ -19,18 +19,20 @@ export const registerHostStateChange = (
       players,
       timer,
       gameId,
+      questionNr,
     }: {
       state: HostStateValue;
       question?: Question;
       players: Player[];
       timer: number;
       gameId: number;
+      questionNr: number;
     }) => {
-      console.log(question);
       hostState.setHostState(state);
       hostState.setPlayers(players);
       hostState.setTimer(timer);
       hostState.setGameId(gameId);
+      hostState.setQuestionNr(questionNr);
 
       if (question) {
         questionState.setQuestionState(question);

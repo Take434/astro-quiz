@@ -6,7 +6,7 @@ export function HostAwardCeremony() {
   const playerScores = useHostState().players;
   const socketSession = useSocketSession();
 
-  playerScores.sort((a, b) => b.score - a.score);
+  playerScores?.sort((a, b) => b.score - a.score);
 
   const nextQuestion = () => {
     continueGame(socketSession.socket);
@@ -30,13 +30,13 @@ export function HostAwardCeremony() {
           className="lucide lucide-podium-icon lucide-podium"
         >
           <text x="3" y="12" style={{ fontSize: 4 }}>
-            {playerScores.at(1)?.icon || "❔"}
+            {playerScores?.at(1)?.icon || "❔"}
           </text>
           <text x="9.3" y="8" style={{ fontSize: 4 }}>
-            {playerScores.at(0)?.icon || "❔"}
+            {playerScores?.at(0)?.icon || "❔"}
           </text>
           <text x="15.5" y="14" style={{ fontSize: 4 }}>
-            {playerScores.at(2)?.icon || "❔"}
+            {playerScores?.at(2)?.icon || "❔"}
           </text>
           <path d="M9 15a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1" />
           <path d="M9 21V11a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v10" />

@@ -9,6 +9,7 @@ import {
   Player,
   PlayerStateValue,
 } from "../types/game.model";
+import { sessionSockets } from "..";
 
 export function registerPlayerHandlers(socket: Socket, io: Server) {
   registerGameJoin(socket, io);
@@ -61,11 +62,12 @@ const registerGameJoin = (socket: Socket, io: Server) =>
 
       socket.join(`game:${data.gameId}`);
 
-      io.to(`game:${data.gameId}`).emit("game:players", game.players);
+      const hostSocketId = sessionSockets.get(game.host);
+
+      io.to(hostSocketId).emit("game:players", game.players);
 
       socket.request.session.gameId = data.gameId;
       await socket.request.session.save();
-      console.log(game);
     } else {
       socket.emit("error", "Das Spiel konnte nicht gefunden werden!");
     }
@@ -95,12 +97,26 @@ const registerQuestionAnswer = (socket: Socket, io: Server) =>
           const question = quiz?.questions[game.questionStep];
           player.answerCount++;
 
-          const score = calculateScore(question!, answerIds, text);
-          console.log("score", score);
+          if (!question) return;
+
+          const score = calculateScore(question, answerIds, text);
 
           player.score += score;
 
-          redisGameStore.set(gameId, game);
+          if (question.type === QuestionTypeValue.FreeText && score > 0) {
+            player.lastAnswerIds = [1];
+          } else {
+            player.lastAnswerIds = answerIds;
+          }
+
+          player.lastScore = score;
+          player.lastText = text;
+
+          await redisGameStore.set(gameId, game);
+          const hostSocketId = sessionSockets.get(game.host);
+
+          io.to(hostSocketId).emit("game:players", game.players);
+          socket.emit("game:players", [player]);
         }
       }
     },
@@ -116,7 +132,12 @@ const registerGameRejoin = (socket: Socket, io: Server) =>
     } else {
       socket.join(`game:${gameId}`);
       const game = await redisGameStore.get(gameId);
-      const state = getPlayerState(game!, socket.request.session.id);
+      if (!game) return;
+      const state = getPlayerState(game, socket.request.session.id);
+      const player = game.players.find(
+        (item) => item.id === socket.request.session.id,
+      );
+      socket.emit("game:players", player ? [player] : []);
       socket.emit("player:state", state);
     }
   });
@@ -169,6 +190,8 @@ function calculateScore(question: Question, answerIds: number[], text: string) {
 
 function getPlayerState(game: Game, userId: string) {
   let playerState: PlayerState | null = null;
+  const question = getAllQuizzes().find((item) => item.id === game.quizId)
+    ?.questions[game.questionStep];
   switch (game.state) {
     case HostStateValue.JoinGame:
       playerState = {
@@ -185,11 +208,9 @@ function getPlayerState(game: Game, userId: string) {
         };
         break;
       }
-      const question = getAllQuizzes().find((item) => item.id === game.quizId)
-        ?.questions[game.questionStep];
       playerState = {
         state: PlayerStateValue.Question,
-        question: question,
+        question: question ? { ...question, correctAnswers: [] } : undefined,
       };
       break;
     case HostStateValue.AwardCeremony:
@@ -211,6 +232,14 @@ function getPlayerState(game: Game, userId: string) {
         gameResults: gameResults,
       };
       break;
+    case HostStateValue.QuestionReveal:
+      const player = game.players.find((item) => item.id === userId);
+      playerState = {
+        state: PlayerStateValue.QuestionReveal,
+        question: question,
+        players: player ? [player] : undefined,
+      };
+      break;
     default:
       playerState = {
         state: PlayerStateValue.Wait,
@@ -224,4 +253,5 @@ export type PlayerState = {
   state: PlayerStateValue;
   question?: Question;
   gameResults?: GameResults;
+  players?: Player[];
 };

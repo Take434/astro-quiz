@@ -18,8 +18,8 @@ export function HostJoinGame() {
     <div className="p-8 flex h-screen">
       <div className="m-auto flex gap-5">
         <ul className="list bg-base-300 rounded-box shadow-md w-75">
-          {players.map((x) => (
-            <li className="list-row p-2">
+          {players?.map((x, i) => (
+            <li key={i} className="list-row p-2">
               <div>{x.icon}</div>
               <p className="truncate w-full">{x.username}</p>
             </li>

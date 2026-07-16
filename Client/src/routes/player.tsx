@@ -2,6 +2,7 @@ import { rootRoute } from "#/App.tsx";
 import { PlayerAwardCeremony } from "#/components/player/award-ceremony";
 import { PlayerJoinGame } from "#/components/player/join-game";
 import { PlayerQuestion } from "#/components/player/question";
+import { PlayerQuestionReveal } from "#/components/player/question-reveal";
 import { PlayerWait } from "#/components/player/wait";
 import { PlayerStateValue, usePlayerState } from "#/stores/playerState";
 import { createRoute, useNavigate, useSearch } from "@tanstack/react-router";
@@ -38,6 +39,9 @@ function RouteComponent() {
       {playerState === PlayerStateValue.Wait && <PlayerWait />}
       {playerState === PlayerStateValue.AwardCeremony && (
         <PlayerAwardCeremony />
+      )}
+      {playerState === PlayerStateValue.QuestionReveal && (
+        <PlayerQuestionReveal />
       )}
     </>
   );

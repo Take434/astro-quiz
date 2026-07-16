@@ -60,18 +60,17 @@ const registerContinueGame = (socket: Socket, io: Server) =>
       (item) => item.id === game.quizId,
     );
 
-    let question = undefined;
+    let question: Question | undefined = undefined;
 
     switch (game.state) {
       case HostStateValue.JoinGame:
         game.state = HostStateValue.Question;
         game.timer = Date.now() + 60_000;
         question = quiz?.questions[game.questionStep];
+        if (question?.possibleAnswers) {
+          question.possibleAnswers = shuffle(question.possibleAnswers);
+        }
         if (question) {
-          socket.emit("host:state", {
-            state: HostStateValue.Question,
-            question: question,
-          });
           io.to(`game:${gameId}`).emit("player:state", {
             state: PlayerStateValue.Question,
             question: { ...question, correctAnswers: [] } satisfies Question,
@@ -82,19 +81,29 @@ const registerContinueGame = (socket: Socket, io: Server) =>
         game.state = HostStateValue.QuestionReveal;
         game.timer = undefined;
         question = quiz?.questions[game.questionStep];
-        io.to(`game:${gameId}`).emit("player:state", {
-          state: PlayerStateValue.Wait,
-          question: question,
+        game.players.forEach((player) => {
+          const socketId = sessionSockets.get(player.id);
+          io.to(socketId).emit("player:state", {
+            state: PlayerStateValue.QuestionReveal,
+            question: question,
+            players: [player],
+          });
         });
         break;
       case HostStateValue.QuestionReveal:
         game.state = HostStateValue.Leaderboard;
+        io.to("game:" + gameId).emit("player:state", {
+          state: PlayerStateValue.Wait,
+        });
         break;
       case HostStateValue.Leaderboard:
         game.questionStep++;
         game.players = game.players.map((item) => ({
           ...item,
           answerCount: game.questionStep,
+          lastScore: 0,
+          lastAnswerIds: [],
+          lastText: undefined,
         }));
         if (quiz?.questions.length === game.questionStep) {
           game.state = HostStateValue.AwardCeremony;
@@ -125,13 +134,14 @@ const registerContinueGame = (socket: Socket, io: Server) =>
           }
 
           if (question) {
-            socket.emit("host:state", {
-              state: HostStateValue.Question,
-              question: question,
-            });
             io.to(`game:${gameId}`).emit("player:state", {
               state: PlayerStateValue.Question,
-              question: question,
+              question: { ...question, correctAnswers: [] } satisfies Question,
+            });
+
+            game.players.forEach((player, index) => {
+              const socketId = sessionSockets.get(player.id);
+              io.to(socketId).emit("game:players", [player] satisfies Player[]);
             });
           }
         }
@@ -150,6 +160,7 @@ const registerContinueGame = (socket: Socket, io: Server) =>
     socket.emit("host:state", {
       state: game.state,
       question: question,
+      questionNr: game.questionStep,
       players: game.players,
     });
   });

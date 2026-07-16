@@ -26,10 +26,13 @@ export const registerPlayerStateChange = (
       question?: Question;
       gameResults?: GameResults;
     }) => {
-      console.log(question);
       updatePlayerState(state);
 
-      if (state === PlayerStateValue.Question && question) {
+      if (
+        (state === PlayerStateValue.Question ||
+          state === PlayerStateValue.QuestionReveal) &&
+        question
+      ) {
         updateQuestionState(question);
       }
 
