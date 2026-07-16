@@ -16,6 +16,18 @@ export function PlayerQuestionReveal() {
     return <>Keine Frage</>;
   }
 
+  const visibleAnswers =
+    question.type === QuestionType.Order
+      ? [...question.possibleAnswers].sort((a, b) => a.id - b.id)
+      : question.possibleAnswers;
+
+  const checkCorrect = (id: number, index: number, arr?: number[]) => {
+    if (question.type === QuestionType.Order) {
+      return arr?.[index] === id;
+    }
+    return arr?.includes(id);
+  };
+
   return (
     <div>
       <div className="flex flex-col h-screen w-screen">
@@ -26,12 +38,12 @@ export function PlayerQuestionReveal() {
           <h1 className="bg-primary text-primary-content text-4xl font-bold p-2">
             {question?.question}
           </h1>
-          <div className="flex flex-wrap gap-3 mt-10 px-3 overflow-scroll mb-10">
-            {question.possibleAnswers.map((a) => (
+          <div className="flex flex-wrap gap-3 mt-10 px-3 overflow-y-auto mb-10">
+            {visibleAnswers.map((a, i) => (
               <div key={a.id} className={`${"w-full"}`}>
                 {a.text && (
                   <div
-                    className={`p-2 border-2 rounded h-fit ${question.correctAnswers?.includes(a.id) ? (player?.lastAnswerIds?.includes(a.id) ? "border-accent" : "border-base-content") : player?.lastAnswerIds?.includes(a.id) ? "border-red-600" : "border-base-content"}`}
+                    className={`p-2 border-2 rounded h-fit ${checkCorrect(a.id, i, question.correctAnswers) ? (checkCorrect(a.id, i, player?.lastAnswerIds) ? "border-accent" : "border-base-content") : checkCorrect(a.id, i, player?.lastAnswerIds) ? "border-red-600" : "border-base-content"}`}
                   >
                     {question.type === QuestionType.FreeText
                       ? (player?.lastText ?? "<Keine Antwort>")
@@ -40,14 +52,14 @@ export function PlayerQuestionReveal() {
                 )}
                 {a.image && (
                   <div
-                    className={`p-2 border-2 rounded h-fit ${question.correctAnswers?.includes(a.id) ? "border-secondary" : ""}`}
+                    className={`p-2 border-2 rounded h-fit ${checkCorrect(a.id, i, question.correctAnswers) ? "border-secondary" : ""}`}
                   >
                     <img className="w-44 h-44" src={a.image} />
                   </div>
                 )}
               </div>
             ))}
-            {question.possibleAnswers.length === 0 && (
+            {visibleAnswers.length === 0 && (
               <div>
                 Die Antwort ist:{" "}
                 <span className="bg-secondary text-secondary-content">

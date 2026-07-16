@@ -7,8 +7,6 @@ export type Quiz = {
   maxScore: number;
 };
 
-const baseImageUrl = "/questions/";
-
 export type Question = {
   id: number;
   image?: string;
@@ -218,26 +216,18 @@ const rawQuizzes: Omit<Quiz, "maxScore">[] = [
           },
           {
             id: 2,
-            text: "Um Störungen durch Mobilfunk, WLAN und andere Funksender zu reduzieren",
-          },
-          {
-            id: 3,
             text: "Um möglichst schwache Radiosignale aus dem Weltall ungestört empfangen zu können",
           },
           {
-            id: 4,
+            id: 3,
             text: "Damit die Teleskope näher an den Sternen sind",
           },
           {
-            id: 5,
-            text: "Weil dort die Luft kälter ist",
-          },
-          {
-            id: 6,
+            id: 4,
             text: "Damit die Teleskope mehr Sonnenlicht erhalten",
           },
         ],
-        correctAnswers: [1, 2, 3],
+        correctAnswers: [1, 2],
       },
       {
         id: 11,
@@ -290,8 +280,16 @@ const rawQuizzes: Omit<Quiz, "maxScore">[] = [
       },
       {
         id: 13,
+        type: QuestionTypeValue.HigherLower,
+        question:
+          "Wird die Wellenlänge elektromagnetischer Strahlung durch die Rotverschiebung länger oder kürzer?",
+        possibleAnswers: [],
+        correctAnswers: [1],
+      },
+      {
+        id: 14,
         type: QuestionTypeValue.FreeText,
-        question: "Wie heißt der bekannte blaue Überriese im Sternbild Orion?",
+        question: "Wie heißt der bekannte blaue Riese im Sternbild Orion?",
         possibleAnswers: [
           {
             id: 1,
@@ -301,7 +299,7 @@ const rawQuizzes: Omit<Quiz, "maxScore">[] = [
         correctAnswers: [1],
       },
       {
-        id: 14,
+        id: 15,
         type: QuestionTypeValue.Order,
         question:
           "Ordne die Planeten unseres Sonnensystems nach ihrer Entfernung zur Sonne (nah => fern)",
@@ -340,6 +338,135 @@ const rawQuizzes: Omit<Quiz, "maxScore">[] = [
           },
         ],
         correctAnswers: [1, 2, 3, 4, 5, 6, 7, 8],
+      },
+      {
+        id: 16,
+        type: QuestionTypeValue.MultipleChoice,
+        image: "/venus.jpg",
+        question:
+          "Welchen Planeten aus unserem Sonnensystem sieht man auf dem Bild?",
+        possibleAnswers: [
+          {
+            id: 1,
+            text: "Venus",
+          },
+          {
+            id: 2,
+            text: "Merkur",
+          },
+          {
+            id: 3,
+            text: "Uranus",
+          },
+          {
+            id: 4,
+            text: "Neptun",
+          },
+          {
+            id: 5,
+            text: "Pluto",
+          },
+        ],
+        correctAnswers: [1],
+      },
+      {
+        id: 17,
+        type: QuestionTypeValue.Order,
+        question:
+          "Bringe die Lebensabschnitte unserer Sonne in die richtige Reihenfolge",
+        possibleAnswers: [
+          {
+            id: 1,
+            text: "Gas-/ Staubwolke",
+          },
+          {
+            id: 2,
+            text: "Hauptreihenstern",
+          },
+          {
+            id: 3,
+            text: "Roter Riese",
+          },
+          {
+            id: 4,
+            text: "Planetarischer Nebel",
+          },
+          {
+            id: 5,
+            text: "Weißer Zwerg",
+          },
+        ],
+        correctAnswers: [1, 2, 3, 4, 5],
+      },
+      {
+        id: 18,
+        type: QuestionTypeValue.MultipleChoice,
+        question:
+          "Welcher Prozess liefert den Hauptanteil der Energie in sonnenähnlichen Sternen",
+        possibleAnswers: [
+          {
+            id: 1,
+            text: "Proton-Proton-Kette",
+          },
+          {
+            id: 2,
+            text: "CNO-Zyklus",
+          },
+          {
+            id: 3,
+            text: "Kohlenstoffbrennen",
+          },
+          {
+            id: 4,
+            text: "Drei-Alpha-Prozess",
+          },
+        ],
+        correctAnswers: [1],
+      },
+      {
+        id: 19,
+        type: QuestionTypeValue.HigherLower,
+        question:
+          "Ist der Atmosphärendruck auf der Venus höher oder niedriger als auf der Erde?",
+        possibleAnswers: [],
+        correctAnswers: [1],
+      },
+      {
+        id: 20,
+        type: QuestionTypeValue.Order,
+        question:
+          "Sortiere die folgenden elektromagnetischen Strahlungen in aufsteigender Reihenfolge nach ihrer Wellenlänge ",
+        possibleAnswers: [
+          {
+            id: 1,
+            text: "Gamma-Strahlung",
+          },
+          {
+            id: 2,
+            text: "Röntgen-Strahlung",
+          },
+          {
+            id: 3,
+            text: "UV-Strahlung",
+          },
+          {
+            id: 4,
+            text: "Infrarot-Strahlung",
+          },
+          {
+            id: 5,
+            text: "Mikrowellen-Strahlung",
+          },
+          {
+            id: 6,
+            text: "Kurzwellen-Strahlung",
+          },
+          {
+            id: 7,
+            text: "Langwellen-Strahlung",
+          },
+        ],
+        correctAnswers: [1, 2, 3, 4, 5, 6, 7],
       },
     ],
   },

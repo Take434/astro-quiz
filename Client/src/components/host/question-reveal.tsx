@@ -30,7 +30,7 @@ export function HostQuestionReveal() {
           <h1 className="bg-primary text-primary-content text-4xl font-bold p-2">
             {question?.question}
           </h1>
-          <div className="flex flex-wrap gap-3 mt-10 px-3 overflow-scroll mb-10">
+          <div className="flex flex-wrap gap-3 mt-10 px-3 overflow-y-auto mb-10 max-h-[70vh]">
             {visibleAnswers.map((a) => (
               <div key={a.id} className={`${a.text ? "w-full" : ""}`}>
                 {a.text && (

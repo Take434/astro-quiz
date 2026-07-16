@@ -21,7 +21,7 @@ export function HostLeaderBoard() {
         <h1 className="text-4xl font-bold text-primary-content bg-primary p-1">
           Platzierung
         </h1>
-        <ul className="list bg-base-300 rounded-box shadow-md w-lg max-h-[80vh] mt-5">
+        <ul className="list bg-base-300 rounded-box shadow-md overflow-y-auto w-lg max-h-[80vh] mt-5">
           {playerScores
             .sort((a, b) => b.score - a.score)
             .map((x, i) => (

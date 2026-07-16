@@ -57,7 +57,7 @@ export function PlayerOrder({ q }: { q: Question }) {
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
+    <div className="flex flex-col h-svh overflow-hidden">
       <h1 className="text-2xl font-bold bg-primary text-primary-content py-5 px-2">
         {q.question}
       </h1>
@@ -78,7 +78,7 @@ export function PlayerOrder({ q }: { q: Question }) {
         </SortableContext>
       </DndContext>
 
-      <button className="btn btn-primary mb-10 mx-3" onClick={submit}>
+      <button className="btn btn-primary mb-5 mx-3" onClick={submit}>
         Antworten
       </button>
     </div>

@@ -29,7 +29,7 @@ export function PlayerHigherLower({ q }: { q: Question }) {
   };
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-svh">
       <h1 className="text-2xl font-bold bg-primary text-primary-content py-5 px-2">
         {q.question}
       </h1>
@@ -47,7 +47,7 @@ export function PlayerHigherLower({ q }: { q: Question }) {
           <ChevronDown className="m-auto h-[80%] w-[80%]" strokeWidth={1} />
         </div>
       </div>
-      <button className="btn btn-primary mt-auto mb-10 mx-3" onClick={submit}>
+      <button className="btn btn-primary mt-auto mb-5 mx-3" onClick={submit}>
         Antworten
       </button>
     </div>
