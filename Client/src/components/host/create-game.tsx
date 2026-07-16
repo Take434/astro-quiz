@@ -78,8 +78,12 @@ function QuizPreview({
       className={`card bg-base-100 w-96 shadow-sm ${selected ? "border-5 border-primary" : "p-1"}`}
       onClick={() => setSelected(q.id)}
     >
-      <figure>
-        <img src={q.cover} />
+      <figure className="w-full h-48 overflow-hidden">
+        <img
+          src={q.cover}
+          alt={q.title}
+          className="w-full h-full object-cover"
+        />
       </figure>
       <div className="card-body bg-base-300">
         <h2 className="card-title">{q.title}</h2>

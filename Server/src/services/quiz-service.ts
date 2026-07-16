@@ -11,7 +11,4 @@ export function registerQuizHandlers(socket: Socket) {
   });
 }
 
-export const getAllQuizzes = (): Quiz[] => {
-  const quizzes = allQuizzes;
-  return quizzes;
-};
+export const getAllQuizzes = (): Quiz[] => allQuizzes;

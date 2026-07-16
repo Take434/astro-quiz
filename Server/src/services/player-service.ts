@@ -123,15 +123,6 @@ const registerGameRejoin = (socket: Socket, io: Server) =>
 
 type JoinEvent = { gameId: number; username: string; icon: string };
 
-function arraysEqualUnordered(a: number[], b: number[]): boolean {
-  if (a.length !== b.length) return false;
-
-  const sortedA = [...a].sort();
-  const sortedB = [...b].sort();
-
-  return sortedA.every((value, index) => value === sortedB[index]);
-}
-
 function calculateScore(question: Question, answerIds: number[], text: string) {
   let score: number;
   switch (question.type) {

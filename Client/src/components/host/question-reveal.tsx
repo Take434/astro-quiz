@@ -1,7 +1,7 @@
 import { typeToBadge } from "#/components/host/question";
 import { continueGame } from "#/services/game-service";
 import { useSocketSession } from "#/socket/SocketSessionProvider";
-import { useQuestionState } from "#/stores/questionState";
+import { QuestionType, useQuestionState } from "#/stores/questionState";
 
 export function HostQuestionReveal() {
   const socketSession = useSocketSession();
@@ -15,6 +15,11 @@ export function HostQuestionReveal() {
     return <>Keine Frage</>;
   }
 
+  const visibleAnswers =
+    question.type === QuestionType.Order
+      ? [...question.possibleAnswers].sort((a, b) => a.id - b.id)
+      : question.possibleAnswers;
+
   return (
     <div>
       <div className="flex flex-col h-screen w-screen">
@@ -26,7 +31,7 @@ export function HostQuestionReveal() {
             {question?.question}
           </h1>
           <div className="flex flex-wrap gap-3 mt-10 px-3 overflow-scroll mb-10">
-            {question.possibleAnswers.map((a) => (
+            {visibleAnswers.map((a) => (
               <div key={a.id} className={`${a.text ? "w-full" : ""}`}>
                 {a.text && (
                   <div
@@ -44,7 +49,7 @@ export function HostQuestionReveal() {
                 )}
               </div>
             ))}
-            {question.possibleAnswers.length === 0 && (
+            {visibleAnswers.length === 0 && (
               <div>
                 Die Antwort ist:{" "}
                 <span className="bg-secondary text-secondary-content">

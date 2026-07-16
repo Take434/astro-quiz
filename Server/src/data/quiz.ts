@@ -32,19 +32,37 @@ export enum QuestionTypeValue {
   Order,
 }
 
-export const allQuizzes: Quiz[] = [
+function calcQuestionMaxScore(question: Question): number {
+  switch (question.type) {
+    case QuestionTypeValue.MultipleChoice:
+      return question.correctAnswers.length;
+    case QuestionTypeValue.FreeText:
+      return 2;
+    case QuestionTypeValue.HigherLower:
+      return 1;
+    case QuestionTypeValue.Order:
+      return question.correctAnswers.length;
+    default:
+      return 0;
+  }
+}
+
+export function calcMaxScore(quiz: Omit<Quiz, "maxScore">): number {
+  return quiz.questions.reduce((sum, q) => sum + calcQuestionMaxScore(q), 0);
+}
+
+// wie cool ist typescript bitte, hallo??
+const rawQuizzes: Omit<Quiz, "maxScore">[] = [
   {
     id: 1,
     title: "Astronomie SoSe 26",
-    maxScore: 10,
     description: "Ein Quiz zu den Inhalten des Kurses im Sommer Semester 26",
-    cover:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
+    cover: "/quiz-one.jpg",
     questions: [
       {
         id: 1,
         type: QuestionTypeValue.MultipleChoice,
-        question: "Nenne einen Planeten aus unserem Sonnensystem",
+        question: "Welche Planeten sind Teil unseres Sonnensystems?",
         possibleAnswers: [
           {
             id: 1,
@@ -52,38 +70,31 @@ export const allQuizzes: Quiz[] = [
           },
           {
             id: 2,
-            text: "Sonne",
+            text: "Saturn",
           },
           {
             id: 3,
-            text: "Mond",
+            text: "Sonne",
           },
           {
             id: 4,
-            text: "Saturn",
+            text: "Mond",
           },
         ],
-        correctAnswers: [1, 4],
+        correctAnswers: [1, 2],
       },
       {
         id: 2,
         type: QuestionTypeValue.FreeText,
-        question: "Was ist die Telefonnummer des Universums?",
+        question:
+          "Was ist die Telefonnummer des Universums? (Ausschließlich Zahlen eingeben)",
         possibleAnswers: [
           {
             id: 1,
-            text: "(555)-711-2555",
-          },
-          {
-            id: 2,
-            text: "555-711-2555",
-          },
-          {
-            id: 3,
             text: "5557112555",
           },
         ],
-        correctAnswers: [],
+        correctAnswers: [1],
       },
       {
         id: 3,
@@ -121,7 +132,7 @@ export const allQuizzes: Quiz[] = [
             text: "25",
           },
         ],
-        correctAnswers: [],
+        correctAnswers: [1],
       },
       {
         id: 5,
@@ -160,7 +171,7 @@ export const allQuizzes: Quiz[] = [
         type: QuestionTypeValue.FreeText,
         question: "In welchem Jahr betrat der erste Mensch den Mond?",
         possibleAnswers: [{ id: 1, text: "1969" }],
-        correctAnswers: [],
+        correctAnswers: [1],
       },
       {
         id: 8,
@@ -287,13 +298,13 @@ export const allQuizzes: Quiz[] = [
             text: "Rigel",
           },
         ],
-        correctAnswers: [],
+        correctAnswers: [1],
       },
       {
         id: 14,
         type: QuestionTypeValue.Order,
         question:
-          "Bringe die Planeten aus unserem Sonnensystem in die richtige Reihenfolge nach Abstand zur Sonne",
+          "Ordne die Planeten unseres Sonnensystems nach ihrer Entfernung zur Sonne (nah => fern)",
         possibleAnswers: [
           {
             id: 1,
@@ -329,76 +340,12 @@ export const allQuizzes: Quiz[] = [
           },
         ],
         correctAnswers: [1, 2, 3, 4, 5, 6, 7, 8],
-      },
-    ],
-  },
-  {
-    id: 2,
-    maxScore: 20,
-    title: "Order Test",
-    description: "Ein Quiz zu den Inhalten des Kurses im Sommer Semester 26",
-    cover:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-    questions: [
-      {
-        id: 1,
-        type: QuestionTypeValue.Order,
-        question:
-          "Bringe die Planeten aus unserem Sonnensystem in die richtige Reihenfolge nach Abstand zur Sonne",
-        possibleAnswers: [
-          {
-            id: 1,
-            text: "Merkur",
-          },
-          {
-            id: 2,
-            text: "Venus",
-          },
-          {
-            id: 3,
-            text: "Erde",
-          },
-          {
-            id: 4,
-            text: "Mars",
-          },
-          {
-            id: 5,
-            text: "Jupiter",
-          },
-          {
-            id: 6,
-            text: "Saturn",
-          },
-          {
-            id: 7,
-            text: "Uranus",
-          },
-          {
-            id: 8,
-            text: "Neptun",
-          },
-        ],
-        correctAnswers: [1, 2, 3, 4, 5, 6, 7, 8],
-      },
-    ],
-  },
-  {
-    id: 3,
-    maxScore: 10,
-    title: "Higher Lower Test",
-    description: "Ein Quiz zu den Inhalten des Kurses im Sommer Semester 26",
-    cover:
-      "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-    questions: [
-      {
-        id: 1,
-        type: QuestionTypeValue.HigherLower,
-        question:
-          "Die Sonne ist 2 Astronomische Einheiten von der Erde entfernt",
-        possibleAnswers: [],
-        correctAnswers: [-1],
       },
     ],
   },
 ];
+
+export const allQuizzes: Quiz[] = rawQuizzes.map((quiz) => ({
+  ...quiz,
+  maxScore: calcMaxScore(quiz),
+}));
