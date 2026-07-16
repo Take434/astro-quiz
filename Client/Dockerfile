@@ -21,7 +21,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 COPY ./Client .
 ENV CI=true
-RUN pnpm i --frozen-lockfile
+RUN pnpm i --no-frozen-lockfile
 RUN pnpm build
 
 FROM caddy:2.11-alpine AS runner
