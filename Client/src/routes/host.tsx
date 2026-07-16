@@ -1,4 +1,4 @@
-import { rootRoute } from "#/app";
+import { rootRoute } from "#/App.tsx";
 import { HostAwardCeremony } from "#/components/host/award-ceremony";
 import { HostCreateGame } from "#/components/host/create-game";
 import { HostJoinGame } from "#/components/host/join-game";

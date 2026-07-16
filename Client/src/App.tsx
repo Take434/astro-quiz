@@ -8,7 +8,7 @@ import {
 import { playerRoute } from "./routes/player";
 import { hostRoute } from "./routes/host";
 import { SocketSessionProvider } from "./socket/SocketSessionProvider";
-import { Home } from "./home";
+import { Home } from "./Home";
 import { ToastContainer } from "react-toastify";
 
 export const rootRoute = createRootRoute({
