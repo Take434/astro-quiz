@@ -3,3 +3,9 @@ This project was developed for the Astro Course at HSRW Kali during the Summer S
 
 ### Starting
 Just Clone the repo and run `docker compose up`. Some variables in the docker compose should be modified to fit your usecase (VITE_BASE_URL, port mapping).
+
+### Deployment
+The app is currently deployed on a VM and hosted on:
+https://astro-quiz.germanywestcentral.cloudapp.azure.com/
+https://astro-quiz.t-herr.com/
+https://astro-quiz.jgiesen.eu/
